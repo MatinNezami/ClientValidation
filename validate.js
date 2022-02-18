@@ -52,8 +52,6 @@ class Validate {
             status: true
         }
     }
-    
-    // work on file and date* types
 
     checkData (input) {
         switch (input.name) {
@@ -83,34 +81,13 @@ class Validate {
         }
     }
 
-    position (input) {
-        let left = 0,
-            top = 0,
-            box = input;
-
-        while (box.offsetParent) {
-            if (!box.getBoundingClientRect)
-                break;
-
-            let dimension = box.getBoundingClientRect();
-            top += dimension.y;
-            left += dimension.x;
-
-            box = box.offsetParent;
-        }
-
-        return {
-            x: left,
-            y: top
-        };
-    }
      
     error (input, message) {
-        const dimension = this.position(input);
+        const dimension = input.getBoundingClientRect();
 
         this.errorTooltip.innerText = message;
-        this.errorTooltip.style.left = `${(dimension.x + input.offsetWidth / 2) - (this.errorTooltip.offsetWidth / 2)}px`;
-        this.errorTooltip.style.top = `${dimension.y + input.offsetHeight}px`;
+        this.errorTooltip.style.left = `${(dimension.x + input.offsetWidth / 2 + window.scrollX) - (this.errorTooltip.offsetWidth / 2)}px`;
+        this.errorTooltip.style.top = `${dimension.y + input.offsetHeight + window.scrollY}px`;
 
         this.errorTooltip.classList.add("active");
 
