@@ -7,7 +7,7 @@ class Validate {
     checkEmpty = input => input.value;
 
     simple = input => ({
-        status: new RegExp(`^.{${input.minLength},${input.maxLength}}$`).test(input.value)
+        status: new RegExp(`^.{${input.minLength? 5: null},${input.maxLength? 30: null}}$`).test(input.value)
     });
 
     email = input => ({
@@ -15,7 +15,7 @@ class Validate {
     });
 
     username = input => ({
-        status: new RegExp(`^[a-zA-Z0-9_]{${input.minLength},${input.maxLength}}$`).test(input.value)
+        status: new RegExp(`^[a-zA-Z0-9_]{${input.minLength? 5: null},${input.maxLength? 30: null}}$`).test(input.value)
     });
 
     retryPassword = (input, password) => ({
@@ -24,7 +24,7 @@ class Validate {
     });
 
     number (input) {
-        if (!(input.value >= +input.min && input.value <= +input.max))
+        if (!(+input.value >= (input.min? +input.min: 5) && +input.value <= (input.max? +input.max: 30)))
             return {
                 status: false,
                 message: "number out of range"
@@ -68,7 +68,8 @@ class Validate {
         }
 
         switch (input.type) {
-            case "number", "range":
+            case "number":
+            case "range":
                 return this.number(input);
 
             case "text":
