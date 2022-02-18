@@ -52,6 +52,8 @@ class Validate {
             status: true
         }
     }
+    
+    // work on file and date* types
 
     checkData (input) {
         switch (input.name) {
@@ -66,7 +68,7 @@ class Validate {
         }
 
         switch (input.type) {
-            case "number":
+            case "number", "range":
                 return this.number(input);
 
             case "text":
@@ -74,6 +76,9 @@ class Validate {
 
             case "email":
                 return this.email(input);
+
+            default:
+                return {status: true};
         }
     }
 
