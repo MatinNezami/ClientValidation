@@ -1,4 +1,5 @@
 $.select("#err-tooltip", "errorTooltip");
+$.errorTooltip.select("p", "errorMsg");
 
 class Validate {
     ok;
@@ -16,7 +17,7 @@ class Validate {
     });
 
     username = input => ({
-        status: new RegExp(`^[a-zA-Z0-9_]{${input.minLength? 5: null},${input.maxLength? 30: null}}$`).test(input.value)
+        status: new RegExp(`^(?=.{${input.minLength? 5: null},${input.maxLength? 30: null}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`).test(input.value)
     });
 
     retryPassword = (input, password) => ({
@@ -29,7 +30,7 @@ class Validate {
             return {
                 status: false,
                 message: "number out of range"
-            }
+            };
 
         return {
             status: true
@@ -37,13 +38,13 @@ class Validate {
     }
 
     password (input, username) {
-        if (!this.username(input).status)
+        if (!new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minLength? 8: null},${input.maxLength? 30: null}}$`).test(input.value))
             return {
                 status: false
             };
 
-        for (let item of input.value.match(/.{1,3}/g)?? [])
-            if (username.value.includes(item))
+        for (let item of input.value.toLowerCase().match(/.{1,3}/g)?? [])
+            if (username.value.toLowerCase().includes(item))
                 return {
                     status: false,
                     message: "password is same with username"
@@ -85,7 +86,7 @@ class Validate {
     static error (element, message) {
         const dimension = element.getBoundingClientRect();
 
-        $.errorTooltip.innerText = message;
+        $.errorMsg.innerText = message;
         $.errorTooltip.style.left = `${(dimension.x + element.offsetWidth / 2 + scrollX) - ($.errorTooltip.offsetWidth / 2)}px`;
         $.errorTooltip.style.top = `${dimension.y + element.offsetHeight + scrollY}px`;
 
