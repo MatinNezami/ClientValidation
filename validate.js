@@ -1,8 +1,9 @@
+$.select("#err-tooltip", "errorTooltip");
+
 class Validate {
     ok;
     inputs = {};
     emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    errorTooltip = document.getElementById("err-tooltip");
 
     checkEmpty = input => input.value;
 
@@ -80,20 +81,21 @@ class Validate {
                 return {status: true};
         }
     }
-
      
-    error (input, message) {
-        const dimension = input.getBoundingClientRect();
+    static error (element, message) {
+        const dimension = element.getBoundingClientRect();
 
-        this.errorTooltip.innerText = message;
-        this.errorTooltip.style.left = `${(dimension.x + input.offsetWidth / 2 + window.scrollX) - (this.errorTooltip.offsetWidth / 2)}px`;
-        this.errorTooltip.style.top = `${dimension.y + input.offsetHeight + window.scrollY}px`;
+        $.errorTooltip.innerText = message;
+        $.errorTooltip.style.left = `${(dimension.x + element.offsetWidth / 2 + scrollX) - ($.errorTooltip.offsetWidth / 2)}px`;
+        $.errorTooltip.style.top = `${dimension.y + element.offsetHeight + scrollY}px`;
 
-        this.errorTooltip.classList.add("active");
+        $.errorTooltip.classList.add("active");
 
         setTimeout(() => {
-            this.errorTooltip.classList.remove("active");
+            $.errorTooltip.classList.remove("active");
         }, 3000);
+
+        scrollTo(0, $.errorTooltip.getBoundingClientRect().y + scrollY / 2);
     }
 
     validate (form) {
@@ -102,12 +104,12 @@ class Validate {
                 validate = this.checkData(this.inputs[input]);
 
             if (this.inputs[input].required && !empty) {
-                this.error(this.inputs[input], "input is empty");
+                Validate.error(this.inputs[input], "input is empty");
                 return false;
             }
 
             if (empty && !validate.status) {
-                this.error(this.inputs[input], validate.message?? "data is not valid");
+                Validate.error(this.inputs[input], validate.message?? "data is not valid");
                 return false;
             }
         }
@@ -116,7 +118,7 @@ class Validate {
     }
 
     constructor (form) {
-        form.querySelectorAll("input").forEach(
+        form.select("input").forEach(
             input => this.inputs[input.name] = input
         );
 
