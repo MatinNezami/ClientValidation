@@ -40,7 +40,8 @@ class Validate {
     password (input, username) {
         if (!new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minLength? 8: null},${input.maxLength? 30: null}}$`).test(input.value))
             return {
-                status: false
+                status: false,
+                message: "password is not strong"
             };
 
         for (let item of input.value.toLowerCase().match(/.{1,3}/g)?? [])
@@ -110,7 +111,7 @@ class Validate {
             }
 
             if (empty && !validate.status) {
-                Validate.error(this.inputs[input], validate.message?? "data is not valid");
+                Validate.error(this.inputs[input], validate.message?? "informations isn't valid");
                 return false;
             }
         }
