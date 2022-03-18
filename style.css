@@ -29,8 +29,11 @@ body form * {
     YOU CAN ADD CUSTOM STYLE TO TOOLTIP BOX
 */
 
-:root {
-    --tooltip-color: #e2e2e2;
+.center-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 #err-tooltip {
@@ -42,11 +45,20 @@ body form * {
     user-select: none;
     top: 0;
     left: 0;
+    border-radius: 7px;
+    background-color: #FFF;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 30px 0px;
+    justify-content: flex-start;
+}
+
+#err-tooltip svg {
+    width: 30px;
+    height: 30px;
+}
+
+#err-tooltip p {
+    font-size: 20px;
     font-family: sans-serif;
-    text-transform: capitalize;
-    border-radius: 3px;
-    background-color: var(--tooltip-color);
-    border-bottom: 3px solid #ffe600;
 }
 
 #err-tooltip.active {
@@ -56,11 +68,15 @@ body form * {
 
 #err-tooltip::before {
     content: "";
-    border-color: transparent transparent var(--tooltip-color) transparent;
+    border-color: transparent transparent #FFF transparent;
     border-style: solid;
-    border-width: 5px;
+    border-width: 7px;
     position: absolute;
-    top: -10px;
+    top: -14px;
     left: 50%;
     transform: translateX(-50%);
+}
+
+#err-tooltip span {
+    vertical-align: super;
 }
