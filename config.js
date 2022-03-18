@@ -1,8 +1,5 @@
-const $ = document;
-
-function isExists (selector) {
-    return $.select(selector);
-}
+const $ = document
+    isExists = selector => $.select(selector);
 
 (_ => {
    
@@ -16,8 +13,10 @@ function isExists (selector) {
         }
    
         function setEvent (elm, propagation = false) {
-            for (let i = 0; i < (events.length > handlers.length? events.length: handlers.length); i++)
-                for (let j = 0; j < (events.length < handlers.length? events.length: handlers.length); j++)
+            const count = events.length > handlers.length? events.length: handlers.length;
+
+            for (let i = 0; i < count; i++)
+                for (let j = 0; j < count; j++)
                     events.length > handlers.length?
                     elm.addEventListener((events[i]?? events[events.length - 1]), (handlers[j]?? handlers[handlers.length - 1]), propagation):
                     elm.addEventListener((events[j]?? events[events.length - 1]), (handlers[i]?? handlers[handlers.length - 1]), propagation);
@@ -50,14 +49,17 @@ function isExists (selector) {
     NodeList.prototype.event = allEvent;
 
     
-    function select (selector, name = undefined) {
+    function select (selector, name) {
         let elms;
-        this instanceof Element?elms = this.querySelectorAll(selector) :elms = $.querySelectorAll(selector);
+        this instanceof Element? elms = this.querySelectorAll(selector): elms = $.querySelectorAll(selector);
+
+        if (elms.length == 1) elms = elms[0];
+        else if (elms.length == 0) elms = undefined;
+
+        if (name && !(name in $))
+            $[name] = elms;
            
-        if (typeof name == "string" && !(name in $))
-            elms.length > 1? $[name] = elms: $[name] = elms[0];
-           
-        return elms.length > 1? elms: elms[0];
+        return elms;
     }
        
     Document.prototype.select = select;
