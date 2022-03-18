@@ -1,5 +1,5 @@
 $.select("#err-tooltip", "errorTooltip");
-$.errorTooltip.select("p", "errorMsg");
+$.errorTooltip.select("span", "errorMsg");
 
 class Validate {
     ok;
