@@ -18,7 +18,8 @@ class Validate {
     });
 
     username = input => ({
-        status: new RegExp(`^(?=.{${input.minLength? 5: null},${input.maxLength? 30: null}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`).test(input.value)
+        status: new RegExp(`^(?=.{${input.minLength? 5: null},${input.maxLength? 30: null}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`)
+            .test(input.value)
     });
 
     retryPassword = (input, password) => ({
@@ -39,10 +40,12 @@ class Validate {
     }
 
     password (input, username) {
-        if (!new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minLength? 8: null},${input.maxLength? 30: null}}$`).test(input.value))
+        const passwordRegex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minLength? 8: null},${input.maxLength? 30: null}}$`);
+
+        if (!passwordRegex.test(input.value))
             return {
                 status: false,
-                message: "password is not strong"
+                message: this.datails? "password is not strong": "password didn't match"
             };
 
         if (!this.samePassword)
@@ -54,7 +57,7 @@ class Validate {
             if (username.value.toLowerCase().includes(item))
                 return {
                     status: false,
-                    message: "password is same with username"
+                    message: this.details? "password is same with username": "password didn't match"
                 };
 
         return {
@@ -68,6 +71,7 @@ class Validate {
                 return this.username(input);
 
             case "password":
+            case "old-password":
                 return this.password(input, this.inputs.username);
 
             case "retry-password":
@@ -111,22 +115,22 @@ class Validate {
             const empty = this.checkEmpty(this.inputs[input]),
                 validate = this.checkData(this.inputs[input]);
 
-            if (this.inputs[input].required && !empty) {
-                Validate.error(this.inputs[input], "input is empty");
-                return false;
-            }
+            if (this.inputs[input].required && !empty)
+                return Validate.error(this.inputs[input], "input is empty");
 
-            if (empty && !validate.status) {
-                Validate.error(this.inputs[input], validate.message?? `${input} isn't valid`);
-                return false;
-            }
+            if (empty && validate.status) continue;
+                
+            let message = validate.message?? `${input} ${this.details? "isn't valid": "didn't match"}`;
+
+            return Validate.error(this.inputs[input], message.replaceAll("-", " "));
         }
 
         return new FormData(form);
     }
 
-    constructor (form, samePassword = true) {
+    constructor (form, samePassword = true, details = false) {
         this.samePassword = samePassword;
+        this.details = details;
 
         form.querySelectorAll("input").forEach(
             input => this.inputs[input.name] = input
