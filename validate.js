@@ -45,7 +45,7 @@ class Validate {
         if (!passwordRegex.test(input.value))
             return {
                 status: false,
-                message: this.datails? "password is not strong": "password didn't match"
+                message: this.details? "password isn't strong": "password didn't match"
             };
 
         if (!this.samePassword)
