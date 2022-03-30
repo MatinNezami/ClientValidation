@@ -107,16 +107,19 @@ class Validate {
 
     validate (form) {
         for (let input in this.inputs) {
-            const validate = this.checkData(this.inputs[input]);
+            input = this.inputs[input];
 
-            if (this.inputs[input].required && !this.inputs[input].value)
-                return Validate.error(this.inputs[input], "input is empty");
+            if (input.required && !input.value)
+                return Validate.error(input, "input is empty");
 
-            if (this.inputs[input].value && validate.status) continue;
+            if (!input.required && !input.value) continue;
+
+            const validate = this.checkData(input);
+
+            if (input.value && validate.status) continue;
                 
             let message = validate.message?? `${input} ${this.details? "isn't valid": "didn't match"}`;
-
-            return Validate.error(this.inputs[input], message.replaceAll("-", " "));
+            return Validate.error(input, message.replaceAll("-", " "));
         }
 
         return new FormData(form);
