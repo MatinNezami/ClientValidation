@@ -51,7 +51,7 @@ class Validate {
                 message: this.details? "password isn't strong": "password didn't match"
             };
 
-        if (this.samePassword && this.same(input.value, username.value))
+        if (this.samePassword && Validate.same(input.value, username.value))
             return {
                 status: false,
                 message: this.details? "password is same with username": "password didn't match"
