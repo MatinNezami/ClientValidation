@@ -8,7 +8,7 @@ class Validate {
     samePassword;
 
     simple = input => ({
-        status: new RegExp(`^.{${input.minLength? 5: null},${input.maxLength? 30: null}}$`).test(input.value)
+        status: new RegExp(`^.{${input.minlen?? 5},${input.maxlen?? 30}}$`).test(input.value)
     });
 
     email = input => ({
@@ -16,7 +16,7 @@ class Validate {
     });
 
     username = input => ({
-        status: new RegExp(`^(?=.{${input.minLength? 5: null},${input.maxLength? 30: null}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`)
+        status: new RegExp(`^(?=.{${input.minlen?? 5},${input.maxlen?? 30}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`)
             .test(input.value)
     });
 
@@ -26,7 +26,7 @@ class Validate {
     });
 
     number (input) {
-        if (!(+input.value >= (input.min? +input.min: 5) && +input.value <= (input.max? +input.max: 30)))
+        if (!(+input.value >= (+input.min?? 5) && +input.value <= (+input.max?? 30)))
             return {
                 status: false,
                 message: "number out of range"
@@ -37,13 +37,13 @@ class Validate {
         };
     }
 
-    same (password, username) {
+    static same (password, username) {
         for (let item of password.toLowerCase().match(/.{1,3}/g)?? [])
             if (username.toLowerCase().includes(item)) return true;
     }
 
     password (input, username) {
-        const passwordRegex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minLength? 8: null},${input.maxLength? 30: null}}$`);
+        const passwordRegex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minlen?? 8},${input.maxlen?? 30}}$`);
 
         if (!passwordRegex.test(input.value))
             return {
@@ -105,9 +105,22 @@ class Validate {
         scrollTo(0, $.errorTooltip.getBoundingClientRect().y + scrollY / 2);
     }
 
+    setLen (input) {
+        const lenAttr = {
+            max: input.max,
+            min: input.min,
+            maxlen: input.maxLength,
+            minlen: input.minLength
+        };
+
+        for (const attr in lenAttr)
+            input[attr] = lenAttr[attr] < 0? null: lenAttr[attr];
+    }
+
     validate (form) {
         for (let input in this.inputs) {
             input = this.inputs[input];
+            this.setLen(input);
 
             if (input.required && !input.value)
                 return Validate.error(input, "input is empty");
@@ -118,7 +131,7 @@ class Validate {
 
             if (input.value && validate.status) continue;
                 
-            let message = validate.message?? `${input} ${this.details? "isn't valid": "didn't match"}`;
+            let message = validate.message?? `${input.name} ${this.details? "isn't valid": "didn't match"}`;
             return Validate.error(input, message.replaceAll("-", " "));
         }
 
