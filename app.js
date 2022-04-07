@@ -1,7 +1,7 @@
 document.getElementById("send").addEventListener("click", submit);
 
 function submit () {
-    const result = new Validate(document.getElementById("data"));
+    const result = new Validate(document.getElementById("data"), true, true);
 
     if (result.data) {
         // AJAX OR USE INFORMATIONS

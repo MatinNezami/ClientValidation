@@ -1,5 +1,5 @@
-$.select("#err-tooltip", "errorTooltip");
-$.errorTooltip.select("span", "errorMsg");
+const errorTooltip = document.getElementById("err-tooltip"),
+    errorMsg = errorTooltip.querySelector("span");
 
 class Validate {
     ok;
@@ -94,15 +94,15 @@ class Validate {
     static error (element, message) {
         const dimension = element.getBoundingClientRect();
 
-        $.errorMsg.innerText = message;
-        $.errorTooltip.style.left = `${(dimension.x + element.offsetWidth / 2 + scrollX) - ($.errorTooltip.offsetWidth / 2)}px`;
-        $.errorTooltip.style.top = `${dimension.y + element.offsetHeight + scrollY}px`;
+        errorMsg.innerText = message;
+        errorTooltip.style.left = `${(dimension.x + element.offsetWidth / 2 + scrollX) - (errorTooltip.offsetWidth / 2)}px`;
+        errorTooltip.style.top = `${dimension.y + element.offsetHeight + scrollY}px`;
 
-        $.errorTooltip.classList.add("active");
+        errorTooltip.classList.add("active");
 
-        setTimeout(_ => $.errorTooltip.classList.remove("active"), 3000);
+        setTimeout(_ => errorTooltip.classList.remove("active"), 3000);
 
-        scrollTo(0, $.errorTooltip.getBoundingClientRect().y + scrollY / 2);
+        scrollTo(0, errorTooltip.getBoundingClientRect().y + scrollY / 2);
     }
 
     setLen (input) {
