@@ -26,7 +26,7 @@ class Validate {
     });
 
     number (input) {
-        if (!(+input.value >= (+input.min?? 5) && +input.value <= (+input.max?? 30)))
+        if (!(+input.value >= (input.minnum?? 5) && +input.value <= (input.maxnum?? 30)))
             return {
                 status: false,
                 message: "number out of range"
@@ -106,15 +106,15 @@ class Validate {
     }
 
     setLen (input) {
-        const lenAttr = {
-            max: input.max,
-            min: input.min,
+        const len = {
+            maxnum: input.max,
+            minnum: input.min,
             maxlen: input.maxLength,
             minlen: input.minLength
         };
 
-        for (const attr in lenAttr)
-            input[attr] = lenAttr[attr] < 0? null: lenAttr[attr];
+        for (const attr in len)
+            input[attr] = len[attr] < 0 || !len[attr]? null: len[attr];
     }
 
     validate (form) {
