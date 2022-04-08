@@ -9,12 +9,15 @@
 </head>
 
 <body>
+    <input type="number" min="10" placeholder="Number">
+    <input type="text" name="username" id="username" placeholder="username" required>
+
     <form action="" id="data">
         <input type="email" name="email" placeholder="Enter Email" required>
         <input type="text" name="first-name" minlength="3" placeholder="Enter Name (Optional)">
-        <input type="text" name="username" placeholder="Enter Username" required minlength="5" maxlength="30">
-        <input type="password" name="password" placeholder="Enter Password" required minlength="5" maxlength="30">
-        <input type="password" name="retry-password" placeholder="Retry Password" required minlength="5" maxlength="30">
+        <input type="text" name="username" placeholder="Enter Username" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <input type="password" name="retry-password" placeholder="Retry Password" required>
         <input type="number" name="age" placeholder="Enter Age" required>
         <input type="checkbox" required name="accept">
         <input type="hidden" value="register" name="type">

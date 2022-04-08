@@ -7,7 +7,7 @@ class Validate {
     emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
     samePassword;
 
-    simple = input => ({
+    text = input => ({
         status: new RegExp(`^.{${input.minlen?? 5},${input.maxlen?? 30}}$`).test(input.value)
     });
 
@@ -20,8 +20,8 @@ class Validate {
             .test(input.value)
     });
 
-    retryPassword = (input, password) => ({
-        status: input.value == password.value,
+    retryPassword = (input) => ({
+        status: input.value == this.inputs.password.value,
         message: "conferm password"
     });
 
@@ -42,7 +42,7 @@ class Validate {
             if (username.toLowerCase().includes(item)) return true;
     }
 
-    password (input, username) {
+    password (input) {
         const passwordRegex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minlen?? 8},${input.maxlen?? 30}}$`);
 
         if (!passwordRegex.test(input.value))
@@ -51,7 +51,7 @@ class Validate {
                 message: this.details? "password isn't strong": "password didn't match"
             };
 
-        if (this.samePassword && Validate.same(input.value, username.value))
+        if (this.samePassword && Validate.same(input.value, this.inputs.username.value))
             return {
                 status: false,
                 message: this.details? "password is same with username": "password didn't match"
@@ -69,10 +69,10 @@ class Validate {
 
             case "password":
             case "old-password":
-                return this.password(input, this.inputs.username);
+                return this.password(input);
 
             case "retry-password":
-                return this.retryPassword(input, this.inputs.password);
+                return this.retryPassword(input);
         }
 
         switch (input.type) {
@@ -81,7 +81,7 @@ class Validate {
                 return this.number(input);
 
             case "text":
-                return this.simple(input);
+                return this.text(input);
 
             case "email":
                 return this.email(input);
@@ -89,6 +89,28 @@ class Validate {
             default:
                 return {status: true};
         }
+    }
+
+    message = (input, message) => (message?? `${input.name} ${this.details? "isn't valid": "didn't match"}`).replaceAll("-", " ");
+
+    add (input, type = input.type) {
+        if (!this.ok || !this[type]) return;
+
+        if (input.required && !input.value) {
+            this.ok = false;
+            return Validate.error(input, "input is empty");
+        }
+
+        if (!input.required && !input.value) return;
+
+        this.setLen(input);
+        const validate = this[type](input);
+
+        if (validate.status)
+            return this.data.append(input.name, input.value);
+
+        this.ok = false;
+        Validate.error(input, this.message(input, validate.message));
     }
      
     static error (element, message) {
@@ -122,19 +144,22 @@ class Validate {
             input = this.inputs[input];
             this.setLen(input);
 
-            if (input.required && !input.value)
+            if (input.required && !input.value) {
+                this.ok = false;
                 return Validate.error(input, "input is empty");
+            }
 
             if (!input.required && !input.value) continue;
 
             const validate = this.checkData(input);
 
             if (input.value && validate.status) continue;
-                
-            let message = validate.message?? `${input.name} ${this.details? "isn't valid": "didn't match"}`;
-            return Validate.error(input, message.replaceAll("-", " "));
+
+            this.ok = false;
+            return Validate.error(input, this.message(input, validate.message));
         }
 
+        this.ok = true;
         return new FormData(form);
     }
 
