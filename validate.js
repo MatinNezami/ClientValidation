@@ -62,60 +62,6 @@ class Validate {
         }
     }
 
-    checkData (input) {
-        switch (input.name) {
-            case "username":
-                return this.username(input);
-
-            case "password":
-            case "old-password":
-                return this.password(input);
-
-            case "retry-password":
-                return this.retryPassword(input);
-        }
-
-        switch (input.type) {
-            case "number":
-            case "range":
-                return this.number(input);
-
-            case "text":
-                return this.text(input);
-
-            case "email":
-                return this.email(input);
-
-            case "file":
-                return this.file(input);
-
-            default:
-                return {status: true};
-        }
-    }
-
-    message = (input, message) => (message?? `${input.name} ${this.details? "isn't valid": "didn't match"}`).replaceAll("-", " ");
-
-    add (input, type = input.type) {
-        if (!this.ok || !this[type]) return;
-
-        if (input.required && !input.value) {
-            this.ok = false;
-            return Validate.error(input, "input is empty");
-        }
-
-        if (!input.required && !input.value) return;
-
-        this.setLen(input);
-        const validate = this[type](input);
-
-        if (validate.status)
-            return this.data.append(input.name, input.value);
-
-        this.ok = false;
-        Validate.error(input, this.message(input, validate.message));
-    }
-
     file (element) {
         const input = element.tagName == "LABLE"? document.getElementById(element.for): element;
 
@@ -137,6 +83,55 @@ class Validate {
         }
 
         return {status: true};
+    }
+
+    url = input => ({
+        status: /^[\w.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,256}\.[a-zA-Z]{1,20}$/.test(input.value),
+    });
+
+    checkData (input) {
+        switch (input.name) {
+            case "username":
+                return this.username(input);
+
+            case "password":
+            case "old-password":
+                return this.password(input);
+
+            case "retry-password":
+                return this.retryPassword(input);
+        }
+
+        switch (input.type) {
+            case "range":
+                return this.number(input);
+
+            default:
+                return this[input.type]? this[input.type](input): {status: true};
+        }
+    }
+
+    message = (input, message) => (message?? `${input.name? input.name: input.type} ${this.details? "isn't valid": "didn't match"}`)
+        .replaceAll("-", " ");
+
+    add (input, type = input.type) {
+        if (!this.ok || !this[type]) return;
+
+        if (input.required && !input.value) {
+            this.ok = false;
+            return Validate.error(input, "input is empty");
+        }
+
+        if (!input.required && !input.value) return;
+
+        this.setLen(input);
+        const validate = this[type](input);
+
+        if (validate.status)
+            return this.data.append(input.name, input.value);
+
+        this.ok = false;
+        Validate.error(input, this.message(input, validate.message));
     }
      
     static error (element, message) {
