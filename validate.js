@@ -86,6 +86,9 @@ class Validate {
             case "email":
                 return this.email(input);
 
+            case "file":
+                return this.file(input);
+
             default:
                 return {status: true};
         }
@@ -111,6 +114,29 @@ class Validate {
 
         this.ok = false;
         Validate.error(input, this.message(input, validate.message));
+    }
+
+    file (element) {
+        const input = element.tagName == "LABLE"? document.getElementById(element.for): element;
+
+        for (const file of input.files) {
+            const type = input.getAttribute("file"),
+                size = input.getAttribute("size").replace("K", "000").replace("M", "000000").replace("G", "000000000");
+
+            if (!file.type.includes(type))
+                return {
+                    status: false,
+                    message: `upload file ins't ${type}`
+                };
+
+            if (file.size > size)
+                return {
+                    status: false,
+                    message: "upload file is big"
+                };
+        }
+
+        return {status: true};
     }
      
     static error (element, message) {
