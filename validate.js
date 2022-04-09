@@ -180,9 +180,9 @@ class Validate {
         return new FormData(form);
     }
 
-    constructor (form, samePassword = true, details = false) {
-        this.samePassword = samePassword;
-        this.details = details;
+    constructor (form) {
+        this.samePassword = form.hasAttribute("same-password");
+        this.details = form.hasAttribute("details-error");
 
         this.inputs = [...form.querySelectorAll("input")];
 

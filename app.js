@@ -1,7 +1,7 @@
 document.getElementById("send").addEventListener("click", submit);
 
 function submit () {
-    const result = new Validate(document.getElementById("data"), true, true);
+    const result = new Validate(document.getElementById("data"));
     result.add(document.querySelector("body > input"));
     result.add(document.getElementById("username"), "username");
 
