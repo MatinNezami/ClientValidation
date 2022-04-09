@@ -93,28 +93,21 @@ class Validate {
 
     checkData (input) {
         switch (input.name) {
-            case "username":
-                return this.username(input);
-
-            case "password":
-            case "old-password":
-                return this.password(input);
-
             case "retry-password":
                 return this.retryPassword(input);
+
+            default:
+                if (this[input.name]?.constructor)
+                    return this[input.name](input);
         }
 
         switch (input.type) {
-            case "range":
-                return this.number(input);
-
             case "checkbox":
             case "radio":
-                return this.bool(input);
-
-            default:
-                return this[input.type]? this[input.type](input): {status: true};
+                return this.bool(input);   
         }
+
+        return this[input.type]?.constructor? this[input.type](input): {status: true};
     }
 
     message = (input, message) => (message?? `${input.name? input.name: input.type} ${this.details? "invalid": "didn't match"}`)
