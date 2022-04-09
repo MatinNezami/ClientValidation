@@ -86,6 +86,11 @@ class Validate {
         status: /^\+\d{12}$/.test(input.value)
     });
 
+    bool = input => ({
+        status: true,
+        check: input.value = input.checked
+    });
+
     checkData (input) {
         switch (input.name) {
             case "username":
@@ -102,6 +107,10 @@ class Validate {
         switch (input.type) {
             case "range":
                 return this.number(input);
+
+            case "checkbox":
+            case "radio":
+                return this.bool(input);
 
             default:
                 return this[input.type]? this[input.type](input): {status: true};
