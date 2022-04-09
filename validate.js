@@ -86,7 +86,7 @@ class Validate {
     }
 
     url = input => ({
-        status: /^[\w.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,256}\.[a-zA-Z]{1,20}$/.test(input.value),
+        status: /^[a-zA-Z0-9.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,253}\.[a-zA-Z]{1,20}(:\d{1,5})?((#|\?).*)?$/.test(input.value),
     });
 
     checkData (input) {
