@@ -32,12 +32,10 @@ class Validate {
                 message: "number out of range"
             };
 
-        return {
-            status: true
-        };
+        return {status: true};
     }
 
-    static same (password, username) {
+    same (password, username) {
         for (let item of password.toLowerCase().match(/.{1,3}/g)?? [])
             if (username.toLowerCase().includes(item)) return true;
     }
@@ -51,15 +49,13 @@ class Validate {
                 message: this.details? "password isn't strong": "password didn't match"
             };
 
-        if (this.samePassword && Validate.same(input.value, this.inputs.username.value))
+        if (this.samePassword && this.same(input.value, this.inputs.username.value))
             return {
                 status: false,
                 message: this.details? "password is same with username": "password didn't match"
             };
 
-        return {
-            status: true
-        }
+        return {status: true};
     }
 
     file (element) {
@@ -111,7 +107,7 @@ class Validate {
         }
     }
 
-    message = (input, message) => (message?? `${input.name? input.name: input.type} ${this.details? "isn't valid": "didn't match"}`)
+    message = (input, message) => (message?? `${input.name? input.name: input.type} ${this.details? "invalid": "didn't match"}`)
         .replaceAll("-", " ");
 
     add (input, type = input.type) {
