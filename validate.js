@@ -2,10 +2,8 @@ const errorTooltip = document.getElementById("err-tooltip"),
     errorMsg = errorTooltip.querySelector("span");
 
 class Validate {
-    ok;
     inputs = {};
     emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    samePassword;
 
     text = input => ({
         status: new RegExp(`^.{${input.minlen?? 5},${input.maxlen?? 30}}$`).test(input.value)
@@ -85,7 +83,12 @@ class Validate {
         status: /^[a-zA-Z0-9.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,253}\.[a-zA-Z]{1,20}(:\d{1,5})?((#|\?).*)?$/.test(input.value),
     });
 
+    tel = input => ({
+        status: /^\+\d{12}$/.test(input.value)
+    });
+
     checkData (input) {
+        console.log(input)
         switch (input.name) {
             case "username":
                 return this.username(input);
