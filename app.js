@@ -8,5 +8,7 @@ function submit () {
     if (!result.ok) return;
 
     console.log("AJAX OR USE INFORMATIONS");
-    result.data.forEach(value => console.log(value));
+
+    for (const data of result.data.entries())
+        console.log(data[0], data[1]);
 }
