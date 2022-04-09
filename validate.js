@@ -2,7 +2,6 @@ const errorTooltip = document.getElementById("err-tooltip"),
     errorMsg = errorTooltip.querySelector("span");
 
 class Validate {
-    inputs = {};
     emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
     text = input => ({
@@ -19,7 +18,7 @@ class Validate {
     });
 
     retryPassword = (input) => ({
-        status: input.value == this.inputs.password.value,
+        status: input.value == this.inputs.find(input => input.name == "password").value,
         message: "conferm password"
     });
 
@@ -47,7 +46,7 @@ class Validate {
                 message: this.details? "password isn't strong": "password didn't match"
             };
 
-        if (this.samePassword && this.same(input.value, this.inputs.username.value))
+        if (this.samePassword && this.same(input.value, this.inputs.find(input => input.name == "username").value))
             return {
                 status: false,
                 message: this.details? "password is same with username": "password didn't match"
@@ -88,7 +87,6 @@ class Validate {
     });
 
     checkData (input) {
-        console.log(input)
         switch (input.name) {
             case "username":
                 return this.username(input);
@@ -160,8 +158,7 @@ class Validate {
     }
 
     validate (form) {
-        for (let input in this.inputs) {
-            input = this.inputs[input];
+        for (let input of this.inputs) {
             this.setLen(input);
 
             if (input.required && !input.value) {
@@ -187,9 +184,7 @@ class Validate {
         this.samePassword = samePassword;
         this.details = details;
 
-        form.querySelectorAll("input").forEach(
-            input => this.inputs[input.name] = input
-        );
+        this.inputs = [...form.querySelectorAll("input")];
 
         this.data = this.validate(form);
     }
