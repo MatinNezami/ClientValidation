@@ -46,6 +46,7 @@ body > input {
     transition: opacity 100ms ease 0s;
     padding: 7px 17px;
     user-select: none;
+    max-width: 300px;
     top: 0;
     left: 0;
     border-radius: 7px;
