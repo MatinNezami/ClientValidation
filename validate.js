@@ -55,9 +55,7 @@ class Validate {
         return {status: true};
     }
 
-    file (element) {
-        const input = element.tagName == "LABLE"? document.getElementById(element.for): element;
-
+    file (input) {
         for (const file of input.files) {
             const type = input.getAttribute("file"),
                 size = input.getAttribute("size").replace("K", "000").replace("M", "000000").replace("G", "000000000");
