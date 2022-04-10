@@ -140,4 +140,13 @@ If you need show error message to lable, use label attribute on input element
 ```
 
 
+#### Error Details Self Inputs
+
+If you needn't show error details for one input use this attribute
+
+```html
+<input type="range" min="0" step="0.1" not-details>
+```
+
+
 For better understand run and read `test.html`

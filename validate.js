@@ -43,13 +43,15 @@ class Validate {
         if (!passwordRegex.test(input.value))
             return {
                 status: false,
-                message: this.details? "password isn't strong": "password didn't match"
+                message: this.details && !input.hasAttribute("not-details")?
+                    "password isn't strong": "password didn't match"
             };
 
         if (this.samePassword && this.same(input.value, this.inputs.find(input => input.getAttribute("check") == "username").value))
             return {
                 status: false,
-                message: this.details? "password is same with username": "password didn't match"
+                message: this.details && !input.hasAttribute("not-details")?
+                    "password is same with username": "password didn't match"
             };
 
         return {status: true};
@@ -93,7 +95,7 @@ class Validate {
         return this[input.type]?.constructor? this[input.type](input): {status: true};
     }
 
-    message = (input, message) => (message?? `value ${this.details? "invalid": "didn't match"}`)
+    message = (input, message) => (message?? `value ${this.details && !input.hasAttribute("not-details")? "invalid": "didn't match"}`)
         .replaceAll("-", " ");
 
     add (input, type = input.type) {
