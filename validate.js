@@ -44,14 +44,14 @@ class Validate {
             return {
                 status: false,
                 message: this.details && !input.hasAttribute("not-details")?
-                    "password isn't strong": "password didn't match"
+                    "password isn't strong": "value didn't match"
             };
 
         if (this.samePassword && this.same(input.value, this.inputs.find(input => input.getAttribute("check") == "username").value))
             return {
                 status: false,
                 message: this.details && !input.hasAttribute("not-details")?
-                    "password is same with username": "password didn't match"
+                    "password and username is same": "value didn't match"
             };
 
         return {status: true};
@@ -82,9 +82,7 @@ class Validate {
         status: /^[a-zA-Z0-9.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,253}\.[a-zA-Z]{1,20}(:\d{1,5})?.*/.test(input.value),
     });
 
-    tel = input => ({
-        status: /^\+\d{12}$/.test(input.value)
-    });
+    tel = input => ({ status: /^\+\d{12}$/.test(input.value) });
 
     checkData (input) {
         const check = input.getAttribute("check");
