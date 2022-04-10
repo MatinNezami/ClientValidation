@@ -5,6 +5,7 @@ You can validation forms with create instance from `Validate` class
 
 ## Usage
 
+
 #### JavaScript
 
 ```js
@@ -22,6 +23,7 @@ if (validate.ok) {
 `validate.ok` porperty is form validation status and `validate.data` propery is instance of `FormData` interface
 
 You can use form data for AJAX to server
+
 
 #### HTML Form
 
@@ -54,10 +56,12 @@ email@: email didn't match
 
 You can not use `details-error` in login and more pages
 
+
 #### Inputs Name
 
 If you validation `username`, `password` and `retype-password` only check with name
 but validation `file`, `url`, `tel` and more check with type
+
 
 #### Validation File
 
@@ -67,6 +71,7 @@ but validation `file`, `url`, `tel` and more check with type
 
 `mime` attribute for upload file type: `image`, `video`, `mpeg` and more types
 `max-size` attribute for maximum upload file size: `100K`, `10G` and more sizes
+
 
 ## Tips
 
@@ -90,12 +95,25 @@ if (validate.ok) {
 }
 ```
 
+If undefined type in add method: `validate.add(input)` type is input type
+
+
 #### Show Error
 
 You need a tooltip box for show error message, this element `id` is `err-tooltip`
 and exists `span` element for insert message
 
 You can use `test.html` tooltip box and add style from `style.css`
+
+
+#### Error To Label Elements
+
+If you need show error message to lable, use label attribute on input element
+
+```html
+<input type="color" label id="background" name="background" required>
+<label for="background">Pleas Select Color</label>
+```
 
 
 For better understand run and read `test.html`

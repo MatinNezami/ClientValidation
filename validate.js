@@ -132,6 +132,9 @@ class Validate {
     }
      
     static error (element, message) {
+        if (element.hasAttribute("label"))
+            element = document.querySelector(`[for=${element.id}]`);
+
         const dimension = element.getBoundingClientRect();
 
         errorMsg.innerText = message;
