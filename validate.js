@@ -17,7 +17,7 @@ class Validate {
             .test(input.value)
     });
 
-    retryPassword = (input) => ({
+    retypePassword = (input) => ({
         status: input.value == this.inputs.find(input => input.name == "password").value,
         message: "conferm password"
     });
@@ -91,8 +91,8 @@ class Validate {
 
     checkData (input) {
         switch (input.name) {
-            case "retry-password":
-                return this.retryPassword(input);
+            case "retype-password":
+                return this.retypePassword(input);
 
             default:
                 if (this[input.name]?.constructor)
