@@ -93,7 +93,7 @@ class Validate {
         return this[input.type]?.constructor? this[input.type](input): {status: true};
     }
 
-    message = (input, message) => (message?? `${input.name? input.name: input.type} ${this.details? "invalid": "didn't match"}`)
+    message = (input, message) => (message?? `value ${this.details? "invalid": "didn't match"}`)
         .replaceAll("-", " ");
 
     add (input, type = input.type) {
