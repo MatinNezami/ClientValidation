@@ -57,10 +57,19 @@ email@: email didn't match
 You can not use `details-error` in login and more pages
 
 
-#### Inputs Name
+#### Inputs Check
 
-If you validation `username`, `password` and `retype-password` only check with name
+If you validation `username`, `password` and `retype-password` only validation with check attribute
 but validation `file`, `url`, `tel` and more check with type
+
+```html
+<form action="">
+    <input type="text" name="client-username" check="username">
+
+    <input type="password" name="password" check="password">
+    <input type="password" name="re-enter-password" check="retype-password">
+</form>
+```
 
 
 #### Validation File

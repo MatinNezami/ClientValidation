@@ -17,8 +17,8 @@ class Validate {
             .test(input.value)
     });
 
-    retypePassword = (input) => ({
-        status: input.value == this.inputs.find(input => input.name == "password").value,
+    ["retype-password"] = input => ({
+        status: input.value == this.inputs.find(input => input.getAttribute("check") == "password").value,
         message: "conferm password"
     });
 
@@ -46,7 +46,7 @@ class Validate {
                 message: this.details? "password isn't strong": "password didn't match"
             };
 
-        if (this.samePassword && this.same(input.value, this.inputs.find(input => input.name == "username").value))
+        if (this.samePassword && this.same(input.value, this.inputs.find(input => input.getAttribute("check") == "username").value))
             return {
                 status: false,
                 message: this.details? "password is same with username": "password didn't match"
@@ -90,14 +90,10 @@ class Validate {
     });
 
     checkData (input) {
-        switch (input.name) {
-            case "retype-password":
-                return this.retypePassword(input);
+        const check = input.getAttribute("check");
 
-            default:
-                if (this[input.name]?.constructor)
-                    return this[input.name](input);
-        }
+        if (check && this[check]?.constructor)
+            return this[check](input);
 
         switch (input.type) {
             case "checkbox":
