@@ -82,10 +82,12 @@ If your input is out of form, you can use add method:
 
 ```js
 const form = document.getElementById("form"),
-    file = document.getElementById("profile-upload"),
+    password = document.getElementById("passwrod"),
+    reEnter = document.getElementById("re-enter"),
     validate = new Validate(form);
 
-validate.add(file, "file");
+validate.add(password);
+validate.add(reEnter, "retype-password");
 
 if (validate.ok) {
     const response = await fetch("server.php", {
@@ -96,6 +98,19 @@ if (validate.ok) {
 ```
 
 If undefined type in add method: `validate.add(input)` type is input type
+
+
+#### Types
+
+* username
+* retype-password
+* password
+* file
+* url
+* tel
+* text
+* email
+* number
 
 
 #### Show Error
