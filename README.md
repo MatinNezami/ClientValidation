@@ -41,15 +41,15 @@ What is `same-password` and `details-error` attributes?
 `details-error` attribute for show details error, for exaple:
 
 ```
-    with details
-    Passwd94: password isn't strong
-    email@: email invalid
+with details
+Passwd94: password isn't strong
+email@: email invalid
 ```
 
 ```
-    without details
-    Passwd94: password didn't match
-    email@: email didn't match
+without details
+Passwd94: password didn't match
+email@: email didn't match
 ```
 
 You can not use `details-error` in login and more pages
@@ -68,10 +68,10 @@ but validation `file`, `url`, `tel` and more check with type
 `mime` attribute for upload file type: `image`, `video`, `mpeg` and more types
 `max-size` attribute for maximum upload file size: `100K`, `10G` and more sizes
 
-#### Tips
+## Tips
 
 
-## Add Other Inputs
+#### Add Other Inputs
 
 If your input is out of form, you can use add method:
 
@@ -90,7 +90,7 @@ if (validate.ok) {
 }
 ```
 
-## Show Error
+#### Show Error
 
 You need a tooltip box for show error message, this element `id` is `err-tooltip`
 and exists `span` element for insert message
