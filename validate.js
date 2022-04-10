@@ -84,22 +84,11 @@ class Validate {
         status: /^\+\d{12}$/.test(input.value)
     });
 
-    bool = input => ({
-        status: true,
-        check: input.value = input.checked
-    });
-
     checkData (input) {
         const check = input.getAttribute("check");
 
         if (check && this[check]?.constructor)
             return this[check](input);
-
-        switch (input.type) {
-            case "checkbox":
-            case "radio":
-                return this.bool(input);   
-        }
 
         return this[input.type]?.constructor? this[input.type](input): {status: true};
     }
