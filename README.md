@@ -59,7 +59,7 @@ You can not use `details-error` in login and more pages
 
 #### Inputs Check
 
-If you validation `username`, `password` and `retype-password` only validation with check attribute
+If you need validation `username`, `password` and `retype-password` only validation with check attribute
 but validation `file`, `url`, `tel` and more check with type
 
 ```html
@@ -142,11 +142,16 @@ If you need show error message to lable, use label attribute on input element
 
 #### Error Details Self Inputs
 
-If you needn't show error details for one input use this attribute
+If you needn't show error details for one input use `not-details` attribute
 
 ```html
 <input type="range" min="0" step="0.1" not-details>
 ```
+
+
+#### Same Password Error Element
+
+If you need error `password and username is same` to other element, use `same-reference` attribute to your element
 
 
 For better understand run and read `test.html`

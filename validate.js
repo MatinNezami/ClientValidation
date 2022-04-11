@@ -101,7 +101,7 @@ class Validate {
 
         if (input.required && !input.value) {
             this.ok = false;
-            return Validate.error(input, "input is empty");
+            return this.error(input, "input is empty");
         }
 
         if (!input.required && !input.value) return;
@@ -113,12 +113,15 @@ class Validate {
             return this.data.append(input.name, input.value);
 
         this.ok = false;
-        Validate.error(input, this.message(input, validate.message));
+        this.error(input, this.message(input, validate.message));
     }
      
-    static error (element, message) {
+    error (element, message) {
         if (element.hasAttribute("label"))
             element = document.querySelector(`[for=${element.id}]`);
+
+        if (message.includes("same"))
+            element = this.form.querySelector("[same-reference]")?? element;
 
         const dimension = element.getBoundingClientRect();
 
@@ -145,13 +148,13 @@ class Validate {
             input[attr] = len[attr] < 0 || !len[attr]? null: len[attr];
     }
 
-    validate (form) {
+    validate () {
         for (let input of this.inputs) {
             this.setLen(input);
 
             if (input.required && !input.value) {
                 this.ok = false;
-                return Validate.error(input, "input is empty");
+                return this.error(input, "input is empty");
             }
 
             if (!input.required && !input.value) continue;
@@ -161,19 +164,20 @@ class Validate {
             if (input.value && validate.status) continue;
 
             this.ok = false;
-            return Validate.error(input, this.message(input, validate.message));
+            return this.error(input, this.message(input, validate.message));
         }
 
         this.ok = true;
-        return new FormData(form);
+        return new FormData(this.form);
     }
 
     constructor (form) {
+        this.form = form;
         this.samePassword = form.hasAttribute("same-password");
         this.details = form.hasAttribute("details-error");
 
         this.inputs = [...form.querySelectorAll("input")];
 
-        this.data = this.validate(form);
+        this.data = this.validate();
     }
 }
