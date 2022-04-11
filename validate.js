@@ -101,7 +101,7 @@ class Validate {
 
         if (input.required && !input.value) {
             this.ok = false;
-            return this.error(input, "input is empty");
+            return Validate.error(input, "input is empty");
         }
 
         if (!input.required && !input.value) return;
@@ -113,15 +113,15 @@ class Validate {
             return this.data.append(input.name, input.value);
 
         this.ok = false;
-        this.error(input, this.message(input, validate.message));
+        Validate.error(input, this.message(input, validate.message), this.form);
     }
      
-    error (element, message) {
+    static error (element, message, form = null) {
         if (element.hasAttribute("label"))
             element = document.querySelector(`[for=${element.id}]`);
 
         if (message.includes("same"))
-            element = this.form.querySelector("[same-reference]")?? element;
+            element = form?.querySelector("[same-reference]")?? element;
 
         const dimension = element.getBoundingClientRect();
 
@@ -154,7 +154,7 @@ class Validate {
 
             if (input.required && !input.value) {
                 this.ok = false;
-                return this.error(input, "input is empty");
+                return Validate.error(input, "input is empty");
             }
 
             if (!input.required && !input.value) continue;
@@ -164,7 +164,7 @@ class Validate {
             if (input.value && validate.status) continue;
 
             this.ok = false;
-            return this.error(input, this.message(input, validate.message));
+            return Validate.error(input, this.message(input, validate.message), this.form);
         }
 
         this.ok = true;

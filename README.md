@@ -154,4 +154,10 @@ If you needn't show error details for one input use `not-details` attribute
 If you need error `password and username is same` to other element, use `same-reference` attribute to your element
 
 
+#### Control Error Tooltip
+
+You can use `Validate.error` method for custom error to elements
+use: `Validate.error(element, message)`
+
+
 For better understand run and read `test.html`
