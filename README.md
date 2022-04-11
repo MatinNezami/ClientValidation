@@ -60,7 +60,7 @@ You can not use `details-error` in login and more pages
 #### Inputs Check
 
 If you need validation `username`, `password` and `retype-password` only validation with check attribute
-but validation `file`, `url`, `tel` and more check with type
+but validation `file`, `url`, `tel` and more, check with input type for example:
 
 ```html
 <form action="">
@@ -132,7 +132,7 @@ You can use `test.html` tooltip box and add style from `style.css`
 
 #### Error To Label Elements
 
-If you need show error message to lable, use label attribute on input element
+If you need show error message to lable, use label attribute on input element, for example:
 
 ```html
 <input type="color" label id="background" name="background" required>
@@ -142,7 +142,7 @@ If you need show error message to lable, use label attribute on input element
 
 #### Error Details Self Inputs
 
-If you needn't show error details for one input use `not-details` attribute
+If you needn't show error details for one input use `not-details` attribute, for example:
 
 ```html
 <input type="range" min="0" step="0.1" not-details>
@@ -158,6 +158,21 @@ If you need error `password and username is same` to other element, use `same-re
 
 You can use `Validate.error` method for custom error to elements
 use: `Validate.error(element, message)`
+
+
+#### Conferm Password Reference
+
+If exists 3 or more password input in form and you need validation `retype-password`
+you can use `reference-retype` attribute on input, for example:
+
+```html
+<form action="" error-details>
+    <input type="password" name="old-password" check="password">
+    <input type="password" name="new-password" reference-retype check="password">
+
+    <input type="password" name="re-enter" check="retype-password">
+</form>
+```
 
 
 For better understand run and read `test.html`

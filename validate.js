@@ -18,7 +18,9 @@ class Validate {
     });
 
     ["retype-password"] = input => ({
-        status: input.value == this.inputs.find(input => input.getAttribute("check") == "password").value,
+        status: input.value == (this.retypeReference?? this.inputs.find(input => input.getAttribute("check") == "password"))
+            .value,
+
         message: "conferm password"
     });
 
@@ -175,6 +177,7 @@ class Validate {
         this.form = form;
         this.samePassword = form.hasAttribute("same-password");
         this.details = form.hasAttribute("details-error");
+        this.retypeReference = form.querySelector("[retype-reference]");
 
         this.inputs = [...form.querySelectorAll("input")];
 
