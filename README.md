@@ -156,8 +156,9 @@ use: `Validate.error(element, message)`
 
 #### Same Password With Username
 
-If you need validation same password with inputs value, you can use `same-password`
-attribute and assign input name for check, for example:
+If you need validation same password with inputs value (username), you can use `same-password`
+attribute and assign input name for check,
+validation input has `same-password` attribute with this attribute value (target input name), for example:
 
 ```html
 <form action="" error-details>
