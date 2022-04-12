@@ -28,7 +28,7 @@ You can use form data for AJAX to server
 #### HTML Form
 
 ```html
-<form action="" same-password details-error>
+<form action="" details-error>
     <input type="text" name="first-name" minlength="4">
     <input type="text" name="username" required>
     <input type="email" name="email" required>
@@ -37,9 +37,8 @@ You can use form data for AJAX to server
 </form>
 ```
 
-What is `same-password` and `details-error` attributes?
+What is`details-error` attribute?
 
-`same-password` attribute for check same password with username and
 `details-error` attribute for show details error, for exaple:
 
 ```
@@ -149,27 +148,22 @@ If you needn't show error details for one input use `not-details` attribute, for
 ```
 
 
-#### Same Password Error Element
-
-If you need error `password and username is same` to other element, use `same-reference` attribute to your element
-
-
 #### Control Error Tooltip
 
 You can use `Validate.error` method for custom error to elements
 use: `Validate.error(element, message)`
 
 
-#### Conferm Password Reference
+#### Same Password With Username
 
-If exists 3 or more password input in form and you need validation `retype-password`
-you can use `reference-retype` attribute on input, for example:
+If you need validation same password with inputs value, you can use `same-password`
+attribute and assign input name for check, for example:
 
 ```html
 <form action="" error-details>
-    <input type="password" name="old-password" check="password">
-    <input type="password" name="new-password" reference-retype check="password">
+    <input type="text" name="id" check="username" same-password="password">
 
+    <input type="password" name="password" check="password">
     <input type="password" name="re-enter" check="retype-password">
 </form>
 ```

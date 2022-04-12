@@ -9,12 +9,12 @@
 </head>
 
 <body>
-    <form action="" id="data" same-password details-error>
+    <form action="" id="data" details-error>
         <input type="email" name="email" placeholder="Enter Email" not-details required>
         <input type="text" name="first-name" minlength="3" placeholder="Enter Name (Optional)">
-        <input type="text" name="id" placeholder="Enter Username" check="username" required same-reference>
+        <input type="text" name="id" placeholder="Enter Username" check="username" required>
         <input type="password" name="old-password" check="password" placeholder="Old Password" required>
-        <input type="password" name="password" placeholder="Enter Password" check="password" required retype-reference>
+        <input type="password" name="password" placeholder="Enter Password" same-password="id" check="password" required retype-reference>
         <input type="password" name="conferm" placeholder="Retype Password" check="retype-password" required>
         <input type="number" name="age" placeholder="Enter Age" required>
         <input type="hidden" value="register" name="type">

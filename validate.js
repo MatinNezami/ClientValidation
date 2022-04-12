@@ -49,13 +49,6 @@ class Validate {
                     "password isn't strong": "value didn't match"
             };
 
-        if (this.samePassword && this.same(input.value, this.inputs.find(input => input.getAttribute("check") == "username").value))
-            return {
-                status: false,
-                message: this.details && !input.hasAttribute("not-details")?
-                    "password and username is same": "value didn't match"
-            };
-
         return {status: true};
     }
 
@@ -87,10 +80,18 @@ class Validate {
     tel = input => ({ status: /^\+\d{12}$/.test(input.value) });
 
     checkData (input) {
-        const check = input.getAttribute("check");
+        const check = input.getAttribute("check"),
+            same = input.getAttribute("same-password"),
+            sameTarget = this.form.querySelector(`[name=${same}]`);
 
         if (check && this[check]?.constructor)
-            return this[check](input);
+            var validate = this[check](input);
+                
+        if (same && this.same(input.value, sameTarget.value))
+            return validate.status? {
+                status: false,
+                message: "password and username is same"
+            }: validate;
 
         return this[input.type]?.constructor? this[input.type](input): {status: true};
     }
@@ -175,7 +176,6 @@ class Validate {
 
     constructor (form) {
         this.form = form;
-        this.samePassword = form.hasAttribute("same-password");
         this.details = form.hasAttribute("details-error");
         this.retypeReference = form.querySelector("[retype-reference]");
 
