@@ -24,7 +24,7 @@ class Validate {
     });
 
     ["retype-password"] = input => (new self.status(
-        input.value == (this.retypeReference?? this.inputs.find(input => input.getAttribute("check") == "password")).value,
+        input.value == this.retypeReference?.value,
         "conferm password"
     ));
 
@@ -53,7 +53,7 @@ class Validate {
                 size = input.getAttribute("max-size").replace("K", "000").replace("M", "000000").replace("G", "000000000");
 
             if (!file.type.includes(type))
-                return new self.status(false, "upload file ins't" + type);
+                return new self.status(false, "upload file ins't " + type);
 
             if (file.size > size)
                 return new self.status(false, "upload file is big");
@@ -66,18 +66,18 @@ class Validate {
 
     tel = input => ({ status: /^\+\d{12}$/.test(input.value) });
 
-    checkData (input) {
+    check (input) {
         const check = input.getAttribute("check"),
             same = input.getAttribute("same-password"),
-            sameTarget = this.form.querySelector(`[name=${same}]`);
+            sameTarget = this.form.querySelector(`[name=${same}]`),
+            validate = this[check](input)?? {status: true};
 
-        if (check && this[check]?.constructor)
-            var validate = this[check](input)?? {status: true};
-                
+        // first error for strong password then same with username
+
         if (same && this.same(input.value, sameTarget.value))
             return validate.status? new self.status(false, "password and username is same"): validate;
 
-        return this[input.type]?.constructor? this[input.type](input)?? {status: true}: {status: true};
+        return validate;
     }
 
     message = (input, message) => (message?? `value ${this.details && !input.hasAttribute("not-details")? "invalid": "didn't match"}`)
@@ -146,7 +146,7 @@ class Validate {
 
             if (!input.required && !input.value) continue;
 
-            const validate = this.checkData(input);
+            const validate = this.check(input);
 
             if (input.value && validate.status) continue;
 
@@ -163,7 +163,7 @@ class Validate {
         this.details = form.hasAttribute("details-error");
         this.retypeReference = form.querySelector("[retype-reference]");
 
-        this.inputs = [...form.querySelectorAll("input")];
+        this.inputs = [...form.querySelectorAll("input[check]")];
 
         this.data = this.validate();
     }

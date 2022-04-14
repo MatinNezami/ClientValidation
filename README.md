@@ -58,8 +58,7 @@ You can not use `details-error` in login and more pages
 
 #### Inputs Check
 
-If you need validation `username`, `password` and `retype-password` only validation with check attribute
-but validation `file`, `url`, `tel` and more, check with input type for example:
+`check` attribute for validation type, for example:
 
 ```html
 <form action="">
@@ -67,6 +66,7 @@ but validation `file`, `url`, `tel` and more, check with input type for example:
 
     <input type="password" name="password" check="password">
     <input type="password" name="re-enter-password" check="retype-password">
+    <input type="number" name="age" check="number">
 </form>
 ```
 
@@ -74,7 +74,7 @@ but validation `file`, `url`, `tel` and more, check with input type for example:
 #### Validation File
 
 ```html
-<input type="file" mime="wepb" max-size="10M">
+<input type="file" check="file" mime="wepb" max-size="10M">
 ```
 
 `mime` attribute for upload file type: `image`, `video`, `mpeg` and more types
