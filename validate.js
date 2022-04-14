@@ -83,7 +83,7 @@ class Validate {
     message = (input, message) => (message?? `value ${this.details && !input.hasAttribute("not-details")? "invalid": "didn't match"}`)
         .replaceAll("-", " ");
 
-    add (input, type = input.type) {
+    add (input, type = input.getAttribute("check")) {
         if (!this.ok || !this[type]) return;
 
         if (input.required && !input.value) {

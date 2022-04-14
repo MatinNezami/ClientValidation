@@ -105,7 +105,7 @@ if (validate.ok) {
 }
 ```
 
-If undefined type in add method: `validate.add(input)` type is input type
+If undefined type in add method: `validate.add(input)` type is input `check` attribute
 
 
 #### Types
