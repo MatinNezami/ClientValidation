@@ -1,7 +1,13 @@
 const errorTooltip = document.getElementById("err-tooltip"),
     errorMsg = errorTooltip.querySelector("span");
 
+function status (status, message) {
+    window.status.prototype.status = status;
+    window.status.prototype.message = message;
+}
+
 class Validate {
+
     emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
     text = input => ({
@@ -26,12 +32,9 @@ class Validate {
 
     number (input) {
         if (!(+input.value >= (input.minnum?? 5) && +input.value <= (input.maxnum?? 30)))
-            return {
-                status: false,
-                message: "number out of range"
-            };
+            return new self.status(false, "number out of range");
 
-        return {status: true};
+        return new self.status(true);
     }
 
     same (password, username) {
@@ -43,13 +46,11 @@ class Validate {
         const passwordRegex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minlen?? 8},${input.maxlen?? 30}}$`);
 
         if (!passwordRegex.test(input.value))
-            return {
-                status: false,
-                message: this.details && !input.hasAttribute("not-details")?
-                    "password isn't strong": "value didn't match"
-            };
+            return new self.status(false,
+                this.details && !input.hasAttribute("not-details")? "password isn't strong": "value didn't match"
+            );
 
-        return {status: true};
+        return new self.status(true);
     }
 
     file (input) {
@@ -58,19 +59,13 @@ class Validate {
                 size = input.getAttribute("max-size").replace("K", "000").replace("M", "000000").replace("G", "000000000");
 
             if (!file.type.includes(type))
-                return {
-                    status: false,
-                    message: `upload file ins't ${type}`
-                };
+                return new self.status(false, "upload file ins't" + type);
 
             if (file.size > size)
-                return {
-                    status: false,
-                    message: "upload file is big"
-                };
+                return new self.status(false, "upload file is big");
         }
 
-        return {status: true};
+        return new self.status(true);
     }
 
     url = input => ({
