@@ -23,18 +23,14 @@ class Validate {
             .test(input.value)
     });
 
-    ["retype-password"] = input => ({
-        status: input.value == (this.retypeReference?? this.inputs.find(input => input.getAttribute("check") == "password"))
-            .value,
-
-        message: "conferm password"
-    });
+    ["retype-password"] = input => (new self.status(
+        input.value == (this.retypeReference?? this.inputs.find(input => input.getAttribute("check") == "password")).value,
+        "conferm password"
+    ));
 
     number (input) {
         if (!(+input.value >= (input.minnum?? 5) && +input.value <= (input.maxnum?? 30)))
             return new self.status(false, "number out of range");
-
-        return new self.status(true);
     }
 
     same (password, username) {
@@ -49,8 +45,6 @@ class Validate {
             return new self.status(false,
                 this.details && !input.hasAttribute("not-details")? "password isn't strong": "value didn't match"
             );
-
-        return new self.status(true);
     }
 
     file (input) {
@@ -64,8 +58,6 @@ class Validate {
             if (file.size > size)
                 return new self.status(false, "upload file is big");
         }
-
-        return new self.status(true);
     }
 
     url = input => ({
@@ -80,15 +72,12 @@ class Validate {
             sameTarget = this.form.querySelector(`[name=${same}]`);
 
         if (check && this[check]?.constructor)
-            var validate = this[check](input);
+            var validate = this[check](input)?? {status: true};
                 
         if (same && this.same(input.value, sameTarget.value))
-            return validate.status? {
-                status: false,
-                message: "password and username is same"
-            }: validate;
+            return validate.status? new self.status(false, "password and username is same"): validate;
 
-        return this[input.type]?.constructor? this[input.type](input): {status: true};
+        return this[input.type]?.constructor? this[input.type](input)?? {status: true}: {status: true};
     }
 
     message = (input, message) => (message?? `value ${this.details && !input.hasAttribute("not-details")? "invalid": "didn't match"}`)
