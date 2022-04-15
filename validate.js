@@ -51,11 +51,15 @@ class Validate {
 
     file (input) {
         for (const file of input.files) {
-            const type = input.getAttribute("mime"),
+            const types = input.getAttribute("mime"),
                 size = input.getAttribute("max-size").replace("K", "000").replace("M", "000000").replace("G", "000000000");
 
-            if (!file.type.includes(type))
-                return new self.status(false, "upload file ins't " + type);
+            for (const type of types.split(","))
+                if (file.type.includes(type.replaceAll(",", "").replaceAll(" ", "")))
+                    var has = true;
+
+            if (!has)
+                return new self.status(false, "upload file ins't " + types);
 
             if (file.size > size)
                 return new self.status(false, "upload file is big");

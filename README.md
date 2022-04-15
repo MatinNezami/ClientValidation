@@ -80,6 +80,8 @@ You can not use `details-error` in login and more pages
 `mime` attribute for upload file type: `image`, `video`, `mpeg` and more types
 `max-size` attribute for maximum upload file size: `100K`, `10G` and more sizes
 
+You can insert multiple type `mime="svg, video"`
+
 
 ## Tips
 
