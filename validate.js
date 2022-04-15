@@ -1,3 +1,5 @@
+"use strict";
+
 const errorTooltip = document.getElementById("err-tooltip"),
     errorMsg = errorTooltip.querySelector("span");
 
