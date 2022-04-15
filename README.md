@@ -169,7 +169,7 @@ validation input has `same-password` attribute with this attribute value (target
 </form>
 ```
 
-* You can check one input with one input for same 
+* You can only check one input with one input for same 
 
 
 For better understand run and read `test.html`

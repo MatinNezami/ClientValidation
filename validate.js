@@ -61,7 +61,7 @@ class Validate {
     }
 
     url = input => ({
-        status: /^[a-zA-Z0-9.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,253}\.[a-zA-Z]{1,20}(:\d{1,5})?.*/.test(input.value),
+        status: /^[a-zA-Z0-9.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,253}\.[a-zA-Z]{1,20}.*$/.test(input.value)
     });
 
     tel = input => ({ status: /^\+\d{12}$/.test(input.value) });
@@ -71,8 +71,6 @@ class Validate {
             same = input.getAttribute("same-password"),
             sameTarget = this.form.querySelector(`[name=${same}]`),
             validate = this[check](input)?? {status: true};
-
-        // first error for strong password then same with username
 
         if (same && this.same(input.value, sameTarget.value))
             return validate.status? new self.status(false, "password and username is same"): validate;
