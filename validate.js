@@ -9,11 +9,10 @@ function status (status, message) {
 }
 
 class Validate {
-
     emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
     text = input => ({
-        status: new RegExp(`^.{${input.minlen?? 5},${input.maxlen?? 30}}$`).test(input.value)
+        status: new RegExp(`^.{${input.minlen},${input.maxlen}}$`).test(input.value)
     });
 
     email = input => ({
@@ -21,7 +20,7 @@ class Validate {
     });
 
     username = input => ({
-        status: new RegExp(`^(?=.{${input.minlen?? 5},${input.maxlen?? 30}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`)
+        status: new RegExp(`^(?=.{${input.minlen},${input.maxlen}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`)
             .test(input.value)
     });
 
@@ -31,7 +30,7 @@ class Validate {
     ));
 
     number (input) {
-        if (!(+input.value >= (input.minnum?? 5) && +input.value <= (input.maxnum?? 30)))
+        if (!(+input.value >= input.minnum && +input.value <= input.maxnum))
             return new self.status(false, "number out of range");
     }
 
@@ -41,7 +40,7 @@ class Validate {
     }
 
     password (input) {
-        const passwordRegex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minlen?? 8},${input.maxlen?? 30}}$`);
+        const passwordRegex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minlen},${input.maxlen}}$`);
 
         if (!passwordRegex.test(input.value))
             return new self.status(false,
@@ -135,8 +134,10 @@ class Validate {
             minlen: input.minLength
         };
 
-        for (const attr in len)
-            input[attr] = len[attr] < 0 || !len[attr]? null: len[attr];
+        for (const attr in len) {
+            const range = attr.includes("min")? 5: 30;
+            input[attr] = len[attr] < 0 || !len[attr]? range: len[attr];
+        }
     }
 
     validate () {
