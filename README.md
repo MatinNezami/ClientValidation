@@ -1,5 +1,5 @@
 JavaScript Validation Form Library
-======================================================
+==================================
 
 You can validation forms with create instance from `Validate` class
 
@@ -30,10 +30,10 @@ You can use form data for AJAX to server
 ```html
 <form action="" details-error>
     <input type="text" name="first-name" minlength="4">
-    <input type="text" name="username" required>
-    <input type="email" name="email" required>
-    <input type="password" name="password" required>
-    <input type="password" name="retype-password" required>
+    <input type="text" name="username" check="username" required>
+    <input type="email" name="email" check="email" required>
+    <input type="password" name="password" check="password" required>
+    <input type="password" name="password" retype="password" required>
 </form>
 ```
 
@@ -62,11 +62,11 @@ You can not use `details-error` in login and more pages
 
 ```html
 <form action="">
-    <input type="text" name="client-username" check="username">
+    <input type="text" name="client-username" required check="username">
 
-    <input type="password" name="password" check="password">
-    <input type="password" name="re-enter-password" check="retype-password">
-    <input type="number" name="age" check="number">
+    <input type="password" name="password" required check="password">
+    <input type="password" name="re-enter-password" required retype="password">
+    <input type="number" name="age" required check="number">
 </form>
 ```
 
@@ -88,16 +88,16 @@ You can insert multiple type `mime="svg, video"`
 
 #### Add Other Inputs
 
-If your input is out of form, you can use add method:
+If your input is out of form, you can use `add` method:
 
 ```js
 const form = document.getElementById("form"),
     password = document.getElementById("passwrod"),
-    reEnter = document.getElementById("re-enter"),
+    conferm = document.getElementById("re-enter"),
     validate = new Validate(form);
 
 validate.add(password);
-validate.add(reEnter, "retype-password");
+validate.add(conferm, "retype");
 
 if (validate.ok) {
     const response = await fetch("server.php", {
@@ -113,7 +113,7 @@ If undefined type in add method: `validate.add(input)` type is input `check` att
 #### Types
 
 * username
-* retype-password
+* retype
 * password
 * file
 * url
@@ -121,6 +121,9 @@ If undefined type in add method: `validate.add(input)` type is input `check` att
 * text
 * email
 * number
+
+Warning you can use `retype`, type in `add` method,
+so use on input set `retype` attribute
 
 
 #### Show Error
@@ -164,19 +167,44 @@ validation input has `same-password` attribute with this attribute value (target
 
 ```html
 <form action="" error-details>
-    <input type="text" name="id" check="username" same-password="password">
+    <input type="text" name="id" check="username" required same-password="password">
 
-    <input type="password" name="password" check="password">
-    <input type="password" name="re-enter" check="retype-password">
+    <input type="password" name="password" required check="password">
+    <input type="password" name="re-enter" required check="retype-password">
 </form>
 ```
 
 * You can only check one input with one input for same 
 
 
+#### Conferm Password
+
+If you need check input value equal with outer inputs value (conferm) use `retype` attribute,
+for example:
+
+```html
+<form action="" error-details>
+    <input type="password" check="password" required name="passwd">
+    <input type="password" retype="passwd" required name="conferm">
+</form>
+```
+
+Use in `add` method:
+
+```js
+const validate = new Validate(form),
+    conferm = document.getElementById("re-enter");
+
+validate.add(conferm, "retype")
+```
+
+Warning: exists `retype` attribute in the `retype` validation
+
+
+
 #### Trim
 
-We are validation inputs value trim, remove start and end white space, except
+validation inputs value trim: remove start and end white space, except
 password validation (`password`, `retype-password`)
 
 

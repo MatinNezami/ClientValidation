@@ -24,8 +24,8 @@ class Validate {
             .test(input.val)
     });
 
-    ["retype-password"] = input => (new self.status(
-        input.val == this.retypeReference?.val,
+    retype = (input, reference = input.getAttribute("retype")) => (new self.status(
+        input.val == this.inputs.find(input => input.name == reference).val,
         "conferm password"
     ));
 
@@ -73,9 +73,13 @@ class Validate {
 
     check (input) {
         const check = input.getAttribute("check"),
+            retype = input.getAttribute("retype"),
             same = input.getAttribute("same-password"),
-            sameTarget = this.form.querySelector(`[name=${same}]`),
-            validate = this[check](input)?? {status: true};
+            sameTarget = this.form.querySelector(`[name=${same}]`);
+
+        if (retype) return this.retype(input, retype);
+
+        const validate = this[check](input)?? {status: true};
 
         if (same && this.same(input.val, sameTarget.val))
             return validate.status? new self.status(false, "password and username is same"): validate;
@@ -87,7 +91,9 @@ class Validate {
         .replaceAll("-", " ");
 
     add (input, type = input.getAttribute("check")) {
-        if (!this.ok || !this[type]) return;
+        this.setLen(input);
+        
+        if (!this.ok) return;
 
         if (input.required && !input.val) {
             this.ok = false;
@@ -96,7 +102,6 @@ class Validate {
 
         if (!input.required && !input.val) return;
 
-        this.setLen(input);
         const validate = this[type](input);
 
         if (validate.status)
@@ -127,7 +132,7 @@ class Validate {
     }
 
     setLen (input) {
-        input.val = input.getAttribute("check").includes("password")? input.value: input.value.trim();
+        input.val = (input.getAttribute("check")?? "password").includes("password")? input.value: input.value.trim();
 
         const len = {
             maxnum: input.max,
@@ -168,9 +173,8 @@ class Validate {
     constructor (form) {
         this.form = form;
         this.details = form.hasAttribute("details-error");
-        this.retypeReference = form.querySelector("[retype-reference]");
 
-        this.inputs = [...form.querySelectorAll("input[check]")];
+        this.inputs = [...form.querySelectorAll("input[check], input[retype]")];
 
         this.data = this.validate();
     }
