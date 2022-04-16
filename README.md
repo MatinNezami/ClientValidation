@@ -37,7 +37,7 @@ You can use form data for AJAX to server
 </form>
 ```
 
-What is`details-error` attribute?
+What is `details-error` attribute?
 
 `details-error` attribute for show details error, for exaple:
 
@@ -122,7 +122,7 @@ If undefined type in add method: `validate.add(input)` type is input `check` att
 * email
 * number
 
-Warning you can use `retype`, type in `add` method,
+Warning you can only use `retype`, type in `add` method,
 so use on input set `retype` attribute
 
 
@@ -170,11 +170,9 @@ validation input has `same-password` attribute with this attribute value (target
     <input type="text" name="id" check="username" required same-password="password">
 
     <input type="password" name="password" required check="password">
-    <input type="password" name="re-enter" required check="retype-password">
+    <input type="password" name="re-enter" required retype="password">
 </form>
 ```
-
-* You can only check one input with one input for same 
 
 
 #### Conferm Password
@@ -198,14 +196,14 @@ const validate = new Validate(form),
 validate.add(conferm, "retype")
 ```
 
-Warning: exists `retype` attribute in the `retype` validation
-
+Warning: in the `add` method exists `retype` attribute in the input for `retype` validation
+If your target is retype password: don't use `check` attribute
 
 
 #### Trim
 
 validation inputs value trim: remove start and end white space, except
-password validation (`password`, `retype-password`)
+password validation (`password`, `retype`)
 
 
 For better understand run and read `test.html`
