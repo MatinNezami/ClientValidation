@@ -174,4 +174,10 @@ validation input has `same-password` attribute with this attribute value (target
 * You can only check one input with one input for same 
 
 
+#### Trim
+
+We are validation inputs value trim, remove start and end white space, except
+password validation (`password`, `retype-password`)
+
+
 For better understand run and read `test.html`

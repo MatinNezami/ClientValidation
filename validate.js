@@ -12,25 +12,25 @@ class Validate {
     emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
     text = input => ({
-        status: new RegExp(`^.{${input.minlen},${input.maxlen}}$`).test(input.value)
+        status: new RegExp(`^.{${input.minlen},${input.maxlen}}$`).test(input.val)
     });
 
     email = input => ({
-        status: this.emailRegex.test(input.value)
+        status: this.emailRegex.test(input.val)
     });
 
     username = input => ({
         status: new RegExp(`^(?=.{${input.minlen},${input.maxlen}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`)
-            .test(input.value)
+            .test(input.val)
     });
 
     ["retype-password"] = input => (new self.status(
-        input.value == this.retypeReference?.value,
+        input.val == this.retypeReference?.val,
         "conferm password"
     ));
 
     number (input) {
-        if (!(+input.value >= input.minnum && +input.value <= input.maxnum))
+        if (!(+input.val >= input.minnum && +input.val <= input.maxnum))
             return new self.status(false, "number out of range");
     }
 
@@ -42,7 +42,7 @@ class Validate {
     password (input) {
         const passwordRegex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minlen},${input.maxlen}}$`);
 
-        if (!passwordRegex.test(input.value))
+        if (!passwordRegex.test(input.val))
             return new self.status(false,
                 this.details && !input.hasAttribute("not-details")? "password isn't strong": "value didn't match"
             );
@@ -66,10 +66,10 @@ class Validate {
     }
 
     url = input => ({
-        status: /^[a-zA-Z0-9.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,253}\.[a-zA-Z]{1,20}.*$/.test(input.value)
+        status: /^[a-zA-Z0-9.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,253}\.[a-zA-Z]{1,20}.*$/.test(input.val)
     });
 
-    tel = input => ({ status: /^\+\d{12}$/.test(input.value) });
+    tel = input => ({ status: /^\+\d{12}$/.test(input.val) });
 
     check (input) {
         const check = input.getAttribute("check"),
@@ -77,7 +77,7 @@ class Validate {
             sameTarget = this.form.querySelector(`[name=${same}]`),
             validate = this[check](input)?? {status: true};
 
-        if (same && this.same(input.value, sameTarget.value))
+        if (same && this.same(input.val, sameTarget.val))
             return validate.status? new self.status(false, "password and username is same"): validate;
 
         return validate;
@@ -89,12 +89,12 @@ class Validate {
     add (input, type = input.getAttribute("check")) {
         if (!this.ok || !this[type]) return;
 
-        if (input.required && !input.value) {
+        if (input.required && !input.val) {
             this.ok = false;
             return Validate.error(input, "input is empty");
         }
 
-        if (!input.required && !input.value) return;
+        if (!input.required && !input.val) return;
 
         this.setLen(input);
         const validate = this[type](input);
@@ -127,6 +127,8 @@ class Validate {
     }
 
     setLen (input) {
+        input.val = input.getAttribute("check").includes("password")? input.value: input.value.trim();
+
         const len = {
             maxnum: input.max,
             minnum: input.min,
@@ -144,16 +146,16 @@ class Validate {
         for (let input of this.inputs) {
             this.setLen(input);
 
-            if (input.required && !input.value) {
+            if (input.required && !input.val) {
                 this.ok = false;
                 return Validate.error(input, "input is empty");
             }
 
-            if (!input.required && !input.value) continue;
+            if (!input.required && !input.val) continue;
 
             const validate = this.check(input);
 
-            if (input.value && validate.status) continue;
+            if (input.val && validate.status) continue;
 
             this.ok = false;
             return Validate.error(input, this.message(input, validate.message), this.form);
