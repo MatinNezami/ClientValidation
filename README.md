@@ -20,8 +20,7 @@ if (validate.ok) {
 }
 ```
 
-`validate.ok` porperty is form validation status and `validate.data` propery is instance of `FormData` interface
-
+`validate.ok` porperty is form validation status and `validate.data` propery is instance of `FormData` interface  
 You can use form data for AJAX to server
 
 
@@ -196,7 +195,7 @@ const validate = new Validate(form),
 validate.add(conferm, "retype")
 ```
 
-Warning: in the `add` method exists `retype` attribute in the input for `retype` validation
+Warning: in the `add` method exists `retype` attribute in the input for `retype` validation  
 If your target is retype password: don't use `check` attribute
 
 
