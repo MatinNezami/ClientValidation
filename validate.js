@@ -56,7 +56,7 @@ class Validate {
     file (input) {
         for (const file of input.files) {
             const types = input.getAttribute("mime"),
-                size = this.fileSize(input.getAttribute("min"), input.getAttribute("max"));
+                size = this.fileSize(input.getAttribute("min"), input.getAttribute("max")?? "10G");
 
             for (const type of types.split(","))
                 if (file.type.includes(type.replaceAll(",", "").replaceAll(" ", "")))

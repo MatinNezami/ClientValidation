@@ -80,7 +80,8 @@ You can not use `details-error` in login and more pages
 `max` and `min` attribute for size range upload file: `100K`, `10G` and more sizes
 
 You can insert multiple type `mime="svg, video"`  
-Warning: you can't use float number in sizes, for example `1.5G`
+Warning: you can't use float number in sizes, for example `1.5G`  
+Tip: default `max` directive value is `10G`
 
 
 ## Tips
