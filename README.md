@@ -73,11 +73,11 @@ You can not use `details-error` in login and more pages
 #### Validation File
 
 ```html
-<input type="file" check="file" mime="wepb" max-size="10M">
+<input type="file" check="file" mime="wepb" min="1K" max="10M">
 ```
 
 `mime` attribute for upload file type: `image`, `video`, `mpeg` and more types
-`max-size` attribute for maximum upload file size: `100K`, `10G` and more sizes
+`max` and `min` attribute for size range upload file: `100K`, `10G` and more sizes
 
 You can insert multiple type `mime="svg, video"`
 

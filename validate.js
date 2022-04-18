@@ -48,10 +48,15 @@ class Validate {
             );
     }
 
+    *fileSize (...sizes) {
+        for (const size of sizes)
+            yield size.replace("K", "000").replace("M", "000000").replace("G", "000000000");
+    }
+
     file (input) {
         for (const file of input.files) {
             const types = input.getAttribute("mime"),
-                size = input.getAttribute("max-size").replace("K", "000").replace("M", "000000").replace("G", "000000000");
+                size = this.fileSize(input.getAttribute("min"), input.getAttribute("max"));
 
             for (const type of types.split(","))
                 if (file.type.includes(type.replaceAll(",", "").replaceAll(" ", "")))
@@ -60,7 +65,10 @@ class Validate {
             if (!has)
                 return new self.status(false, "upload file ins't " + types);
 
-            if (file.size > size)
+            if (file.size < size.next().value)
+                return new self.status(false, "upload file is small");
+                
+            if (file.size > size.next().value)
                 return new self.status(false, "upload file is big");
         }
     }
