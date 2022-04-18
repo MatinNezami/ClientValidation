@@ -84,6 +84,8 @@ class Validate {
             same = input.getAttribute("same-password"),
             sameTarget = this.form.querySelector(`[name=${same}]`);
 
+        if (sameTarget) this.setLen(sameTarget)
+
         if (retype) return this.retype(input, retype);
 
         const validate = this[check](input)?? {status: true};
@@ -121,9 +123,6 @@ class Validate {
     static error (element, message, form = null) {
         if (element.hasAttribute("label"))
             element = document.querySelector(`[for=${element.id}]`);
-
-        if (message.includes("same"))
-            element = form?.querySelector("[same-reference]")?? element;
 
         const dimension = element.getBoundingClientRect();
 
