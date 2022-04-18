@@ -62,8 +62,7 @@ class Validate {
                 if (file.type.includes(type.replaceAll(",", "").replaceAll(" ", "")))
                     var has = true;
 
-            if (!has)
-                return new self.status(false, "upload file ins't " + types);
+            if (!has) return new self.status(false, "upload file type invalid");
 
             if (file.size < size.next().value)
                 return new self.status(false, "upload file is small");
