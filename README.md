@@ -76,10 +76,11 @@ You can not use `details-error` in login and more pages
 <input type="file" check="file" mime="wepb" min="1K" max="10M">
 ```
 
-`mime` attribute for upload file type: `image`, `video`, `mpeg` and more types
+`mime` attribute for upload file type: `image`, `video`, `mpeg` and more types  
 `max` and `min` attribute for size range upload file: `100K`, `10G` and more sizes
 
-You can insert multiple type `mime="svg, video"`
+You can insert multiple type `mime="svg, video"`  
+Warning: you can't use float number in sizes, for example `1.5G`
 
 
 ## Tips
