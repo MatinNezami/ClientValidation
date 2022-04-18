@@ -81,7 +81,7 @@ You can not use `details-error` in login and more pages
 
 You can insert multiple type `mime="svg, video"`  
 Warning: you can't use float number in sizes, for example `1.5G`  
-Tip: default `max` directive value is `10G`
+Tip: default `max` attribute value is `10G` and `min` attribute value is `1K`
 
 
 ## Tips
