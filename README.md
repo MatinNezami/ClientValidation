@@ -91,14 +91,21 @@ Tip: default `max` attribute value is `10G` and `min` attribute value is `1K`
 
 If your input is out of form, you can use `add` method:
 
+```html
+<form action="" id="form" details-error>
+    <input type="password" name="passwd" check="password" id="password">
+    <input type="password" name="retype" id="re-enter" retype="password">
+</form>
+```
+
 ```js
 const form = document.getElementById("form"),
-    password = document.getElementById("passwrod"),
+    password = document.getElementById("password"),
     conferm = document.getElementById("re-enter"),
     validate = new Validate(form);
 
 validate.add(password);
-validate.add(conferm, "retype");
+validate.add(conferm);
 
 if (validate.ok) {
     const response = await fetch("server.php", {
@@ -108,13 +115,10 @@ if (validate.ok) {
 }
 ```
 
-If undefined type in add method: `validate.add(input)` type is input `check` attribute
 
-
-#### Types
+#### Types For Check Attribute
 
 * username
-* retype
 * password
 * file
 * url
@@ -123,8 +127,7 @@ If undefined type in add method: `validate.add(input)` type is input `check` att
 * email
 * number
 
-Warning you can only use `retype`, type in `add` method,
-so use on input set `retype` attribute
+If you need check retype password use `retype` attribute
 
 
 #### Show Error
@@ -188,23 +191,13 @@ for example:
 </form>
 ```
 
-Use in `add` method:
-
-```js
-const validate = new Validate(form),
-    conferm = document.getElementById("re-enter");
-
-validate.add(conferm, "retype")
-```
-
-Warning: in the `add` method exists `retype` attribute in the input for `retype` validation  
-If your target is retype password: don't use `check` attribute
-
 
 #### Trim
 
-validation inputs value trim: remove start and end white space, except
+validation inputs value trim (remove start and end white space), except
 password validation (`password`, `retype`)
+
+but in `Validate.data` property inputs value append without trim
 
 
 For better understand run and read `test.html`
