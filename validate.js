@@ -99,28 +99,13 @@ class Validate {
     message = (input, message) => (message?? `value ${this.details && !input.hasAttribute("not-details")? "invalid": "didn't match"}`)
         .replaceAll("-", " ");
 
-    add (input, type = input.getAttribute("check")) {
-        this.setLen(input);
-        
-        if (!this.ok) return;
+    add (input) {
+        this.validate([input]);
 
-        if (input.required && !input.val) {
-            this.ok = false;
-            return Validate.error(input, "input is empty");
-        }
-
-        if (!input.required && !input.val) return;
-
-        const validate = this[type](input);
-
-        if (validate.status)
-            return this.data.append(input.name, input.value);
-
-        this.ok = false;
-        Validate.error(input, this.message(input, validate.message), this.form);
+        if (this.ok) this.data.append(input.name, input.value);
     }
      
-    static error (element, message, form = null) {
+    static error (element, message) {
         if (element.hasAttribute("label"))
             element = document.querySelector(`[for=${element.id}]`);
 
@@ -153,8 +138,8 @@ class Validate {
         }
     }
 
-    validate () {
-        for (let input of this.inputs) {
+    validate (inputs) {
+        for (let input of inputs) {
             this.setLen(input);
 
             if (input.required && !input.val) {
@@ -182,6 +167,6 @@ class Validate {
 
         this.inputs = [...form.querySelectorAll("input[check], input[retype]")];
 
-        this.data = this.validate();
+        this.data = this.validate(this.inputs);
     }
 }
