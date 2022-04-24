@@ -99,7 +99,7 @@ class Validate {
     message = (input, message) => (message?? `value ${this.details && !input.hasAttribute("not-details")? "invalid": "didn't match"}`)
         .replaceAll("-", " ");
 
-    add (input) {
+    set add (input) {
         this.validate([input]);
 
         if (this.ok) this.data.append(input.name, input.value);

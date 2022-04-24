@@ -89,7 +89,7 @@ Tip: default `max` attribute value is `10G` and `min` attribute value is `1K`
 
 #### Add Other Inputs
 
-If your input is out of form, you can use `add` method:
+If your input is out of form, you can use `add` setter method:
 
 ```html
 <form action="" id="form" details-error>
@@ -104,8 +104,8 @@ const form = document.getElementById("form"),
     conferm = document.getElementById("re-enter"),
     validate = new Validate(form);
 
-validate.add(password);
-validate.add(conferm);
+validate.add = password;
+validate.add = conferm;
 
 if (validate.ok) {
     const response = await fetch("server.php", {
