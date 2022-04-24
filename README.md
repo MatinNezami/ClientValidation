@@ -27,7 +27,7 @@ You can use form data for AJAX to server
 #### HTML Form
 
 ```html
-<form action="" details-error>
+<form action="" details>
     <input type="text" name="first-name" minlength="4">
     <input type="text" name="username" check="username" required>
     <input type="email" name="email" check="email" required>
@@ -36,9 +36,9 @@ You can use form data for AJAX to server
 </form>
 ```
 
-What is `details-error` attribute?
+What is `details` attribute?
 
-`details-error` attribute for show details error, for exaple:
+`details` attribute for show details error, for exaple:
 
 ```
 with details
@@ -52,7 +52,7 @@ Passwd94: password didn't match
 email@: email didn't match
 ```
 
-You can not use `details-error` in login and more pages
+You can not use `details` in login and more pages
 
 
 #### Inputs Check
@@ -92,7 +92,7 @@ Tip: default `max` attribute value is `10G` and `min` attribute value is `1K`
 If your input is out of form, you can use `add` setter method:
 
 ```html
-<form action="" id="form" details-error>
+<form action="" id="form" details>
     <input type="password" name="passwd" check="password" id="password">
     <input type="password" name="retype" id="re-enter" retype="password">
 </form>

@@ -163,7 +163,7 @@ class Validate {
 
     constructor (form) {
         this.form = form;
-        this.details = form.hasAttribute("details-error");
+        this.details = form.hasAttribute("details");
 
         this.inputs = [...form.querySelectorAll("input[check], input[retype]")];
 
