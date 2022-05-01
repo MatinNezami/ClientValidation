@@ -49,14 +49,21 @@ class Validate {
     }
 
     *fileSize (...sizes) {
-        for (const size of sizes)
-            yield size.replace("K", "000").replace("M", "000000").replace("G", "000000000");
+        const bytes = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+        let i = 0;
+
+        for (let size of sizes) {
+            while (i < bytes.length)
+                size = size.replaceAll(bytes[i], `*10**${++i * 3}`);
+
+            yield new Function(`return ${size}`)();
+        }
     }
 
     file (input) {
         for (const file of input.files) {
             const types = input.getAttribute("mime"),
-                size = this.fileSize(input.getAttribute("min")?? "1K", input.getAttribute("max")?? "10G");
+                size = this.fileSize(input.getAttribute("min")?? "1KB", input.getAttribute("max")?? "10GB");
 
             for (const type of types.split(","))
                 if (file.type.includes(type.replaceAll(",", "").replaceAll(" ", "")))

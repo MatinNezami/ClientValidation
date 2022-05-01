@@ -73,15 +73,16 @@ You can not use `details` in login and more pages
 #### Validation File
 
 ```html
-<input type="file" check="file" mime="wepb" min="1K" max="10M">
+<input type="file" check="file" mime="wepb" min="1.8KB" max="10MB">
 ```
 
 `mime` attribute for upload file type: `image`, `video`, `mpeg` and more types  
-`max` and `min` attribute for size range upload file: `100K`, `10G` and more sizes
+`max` and `min` attribute for size range upload file: `100KB`, `10GB` and more sizes
 
 You can insert multiple type `mime="svg, video"`  
-Warning: you can't use float number in sizes, for example `1.5G`  
-Tip: default `max` attribute value is `10G` and `min` attribute value is `1K`
+Tip: default `max` attribute value is `10GB` and `min` attribute value is `1KB`
+
+Sizes: `KB MB GB TB PB EB ZB YB`
 
 
 ## Tips
