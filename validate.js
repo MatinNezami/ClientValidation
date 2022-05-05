@@ -127,7 +127,8 @@ class Validate {
 
         errorTooltip.classList.add("active");
 
-        setTimeout(_ => errorTooltip.classList.remove("active"), 3000);
+        clearTimeout(window._errorTime_);
+        window._errorTime_ = setTimeout(_ => errorTooltip.classList.remove("active"), 3000);
 
         scrollTo(0, errorTooltip.getBoundingClientRect().y + scrollY / 2);
     }
