@@ -50,12 +50,13 @@ class Validate {
 
     *fileSize (...sizes) {
         const bytes = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-        let i = -1;
 
         for (let size of sizes) {
+            let i = -1;
+
             while (i < bytes.length && (++i, true))
                 if (size.includes && size.includes(bytes[i]))
-                    size = size.replace(bytes[i], "") * 10 ** (i * 3);
+                    size = size.replace(bytes[i], "") * 10 ** (i + 1 * 3);
 
             yield size;
         }
@@ -105,7 +106,7 @@ class Validate {
     }
 
     message = (input, message) => (message?? `value ${this.details && !input.hasAttribute("not-details")? "invalid": "didn't match"}`)
-        .replaceAll("-", " ");
+        .replaceAll('-', ' ');
 
     set add (input) {
         this.validate([input]);
@@ -175,6 +176,6 @@ class Validate {
 
         this.inputs = [...form.querySelectorAll("input[check], input[retype]")];
 
-        this.data = this.validate(this.inputs);
+        this.data = this.validate(this.inputs)?? {append: _ => {}};
     }
 }
