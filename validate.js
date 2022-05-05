@@ -50,13 +50,14 @@ class Validate {
 
     *fileSize (...sizes) {
         const bytes = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-        let i = 0;
+        let i = -1;
 
         for (let size of sizes) {
-            while (i < bytes.length)
-                size = size.replaceAll(bytes[i], `*10**${++i * 3}`);
+            while (i < bytes.length && (++i, true))
+                if (size.includes && size.includes(bytes[i]))
+                    size = size.replace(bytes[i], "") * 10 ** (i * 3);
 
-            yield new Function(`return ${size}`)();
+            yield size;
         }
     }
 
@@ -65,8 +66,8 @@ class Validate {
             const types = input.getAttribute("mime"),
                 size = this.fileSize(input.getAttribute("min")?? "1KB", input.getAttribute("max")?? "10GB");
 
-            for (const type of types.split(","))
-                if (file.type.includes(type.replaceAll(",", "").replaceAll(" ", "")))
+            for (const type of types.split(','))
+                if (file.type.includes(type.replaceAll(',', "").replaceAll(' ', "")))
                     var has = true;
 
             if (!has) return new self.status(false, "upload file type invalid");
@@ -107,7 +108,6 @@ class Validate {
         .replaceAll("-", " ");
 
     set add (input) {
-        console.log("adding");
         this.validate([input]);
 
         if (this.ok) this.data.append(input.name, input.value);
@@ -148,7 +148,6 @@ class Validate {
 
     validate (inputs) {
         for (let input of inputs) {
-            console.log("validation");
             this.setLen(input);
 
             if (input.required && !input.val) {
