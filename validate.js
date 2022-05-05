@@ -109,6 +109,7 @@ class Validate {
         .replaceAll('-', ' ');
 
     set add (input) {
+        if (!this.ok) return;
         this.validate([input]);
 
         if (this.ok) this.data.append(input.name, input.value);
@@ -167,7 +168,9 @@ class Validate {
         }
 
         this.ok = true;
-        return new FormData(this.form);
+
+        if (!this.data)
+            return new FormData(this.form);
     }
 
     constructor (form) {
@@ -176,6 +179,6 @@ class Validate {
 
         this.inputs = [...form.querySelectorAll("input[check], input[retype]")];
 
-        this.data = this.validate(this.inputs)?? {append: _ => {}};
+        this.data = this.validate(this.inputs)?? new FormData;
     }
 }
