@@ -107,6 +107,7 @@ class Validate {
         .replaceAll("-", " ");
 
     set add (input) {
+        console.log("adding");
         this.validate([input]);
 
         if (this.ok) this.data.append(input.name, input.value);
@@ -147,6 +148,7 @@ class Validate {
 
     validate (inputs) {
         for (let input of inputs) {
+            console.log("validation");
             this.setLen(input);
 
             if (input.required && !input.val) {
