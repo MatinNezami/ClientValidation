@@ -89,6 +89,26 @@ Sizes: `KB MB GB TB PB EB ZB YB`
 ## Tips
 
 
+#### Inputs Layout
+
+If you need check retype and same password inputs, you should insert this input
+to bottom it, for example:
+
+```html
+True Layout:
+<form action="" id="form" error-details>
+    <input type="password" name="password" check="password">
+    <input type="password" name="retype" retype="password">
+</form>
+
+False Layout (TypeError):
+<form action="" id="form" error-details>
+    <input type="text" name="username" check="username" same-password="password">
+    <input type="password" name="password" check="password">
+</form>
+```
+
+
 #### Add Other Inputs
 
 If your input is out of form, you can use `add` setter method:
