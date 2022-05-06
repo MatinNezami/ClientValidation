@@ -3,11 +3,6 @@
 const errorTooltip = document.getElementById("err-tooltip"),
     errorMsg = errorTooltip.querySelector("span");
 
-function status (status, message) {
-    window.status.prototype.status = status;
-    window.status.prototype.message = message;
-}
-
 class Validate {
     emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
@@ -127,14 +122,7 @@ class Validate {
         scrollTo(0, errorTooltip.getBoundingClientRect().y + scrollY / 2);
     }
 
-    // clean this method
-    set values (input) {
-        input.val = (input.getAttribute("check")?? "password").includes("password")? input.value: input.value.trim();
-
-        input.check = input.getAttribute("check");
-        input.retype = this.inputs.find(retype => retype.name == input.getAttribute("retype"))?.val;
-        input.same = this.inputs.find(target => target.name == input.getAttribute("same-password"))?.val;
-
+    set length (input) {
         const len = {
             maxnum: input.max,
             minnum: input.min,
@@ -146,6 +134,16 @@ class Validate {
             const range = attr.includes("min")? 5: 30;
             input[attr] = len[attr] < 0 || !len[attr]? range: len[attr];
         }
+    }
+
+    set values (input) {
+        input.check = input.getAttribute("check");
+        input.val = input.check.includes("password")? input.value: input.value.trim();
+
+        input.retype = this.inputs.find(retype => retype.name == input.getAttribute("retype"))?.val;
+        input.same = this.inputs.find(target => target.name == input.getAttribute("same-password"))?.val;
+
+        this.length = input;
     }
 
     // clean this method
