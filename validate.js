@@ -11,27 +11,31 @@ function status (status, message) {
 class Validate {
     emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
-    text = input => ({
-        status: new RegExp(`^.{${input.minlen},${input.maxlen}}$`).test(input.val)
-    });
+    status (status, message) {
+        this.ok = status;
+        this.message = message;
+    }
 
-    email = input => ({
-        status: this.emailRegex.test(input.val)
-    });
+    text = input => this.status(
+        new RegExp(`^.{${input.minlen},${input.maxlen}}$`).test(input.val)
+    );
 
-    username = input => ({
-        status: new RegExp(`^(?=.{${input.minlen},${input.maxlen}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`)
+    email = input => this.status(this.emailRegex.test(input.val));
+
+    username = input => this.status(
+        new RegExp(`^(?=.{${input.minlen},${input.maxlen}}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$`)
             .test(input.val)
-    });
+    );
 
-    retype = (input, reference = input.getAttribute("retype")) => (new self.status(
+    // use factory function
+    retype = (input, reference = input.getAttribute("retype")) => (this.status(
         input.val == this.inputs.find(input => input.name == reference).val,
         "conferm password"
     ));
 
     number (input) {
         if (!(+input.val >= input.minnum && +input.val <= input.maxnum))
-            return new self.status(false, "number out of range");
+            this.status(false, "number out of range");
     }
 
     same (password, username) {
@@ -43,7 +47,7 @@ class Validate {
         const passwordRegex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${input.minlen},${input.maxlen}}$`);
 
         if (!passwordRegex.test(input.val))
-            return new self.status(false,
+            this.status(false,
                 this.details && !input.hasAttribute("not-details")? "password isn't strong": "value didn't match"
             );
     }
@@ -62,6 +66,7 @@ class Validate {
         }
     }
 
+    // clean this method
     file (input) {
         for (const file of input.files) {
             const types = input.getAttribute("mime"),
@@ -71,22 +76,23 @@ class Validate {
                 if (file.type.includes(type.replaceAll(',', "").replaceAll(' ', "")))
                     var has = true;
 
-            if (!has) return new self.status(false, "upload file type invalid");
+            if (!has) return this.status(false, "upload file type invalid");
 
             if (file.size < size.next().value)
-                return new self.status(false, "upload file is small");
+                return this.status(false, "upload file is small");
                 
             if (file.size > size.next().value)
-                return new self.status(false, "upload file is big");
+                return this.status(false, "upload file is big");
         }
     }
 
-    url = input => ({
-        status: /^[a-zA-Z0-9.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,253}\.[a-zA-Z]{1,20}.*$/.test(input.val)
-    });
+    url = input => this.status(
+        /^[a-zA-Z0-9.-]{1,50}:\/\/[\w@:%.\+~#=-]{1,253}\.[a-zA-Z]{1,20}.*$/.test(input.val)
+    );
 
-    tel = input => ({ status: /^\+\d{12}$/.test(input.val) });
+    tel = input => this.status(/^\+\d{12}$/.test(input.val));
 
+    // clean this method
     check (input) {
         const check = input.getAttribute("check"),
             retype = input.getAttribute("retype"),
@@ -97,16 +103,17 @@ class Validate {
 
         if (retype) return this.retype(input, retype);
 
-        const validate = this[check](input)?? {status: true};
+        this[check](input);
 
-        if (same && this.same(input.val, sameTarget.val))
-            return validate.status? new self.status(false, "password and username is same"): validate;
-
-        return validate;
+        if (same && this.same(input.val, sameTarget.val) && this.ok)
+            this.status(false, "password and username is same");
     }
 
-    message = (input, message) => (message?? `value ${this.details && !input.hasAttribute("not-details")? "invalid": "didn't match"}`)
-        .replaceAll('-', ' ');
+    setMessage (input) {
+        const message = "value " + (this.details && !input.hasAttribute("not-details")? "invalid": "didn't match");
+
+        return (this.message?? message).replaceAll('-', ' ');
+    }
 
     set add (input) {
         if (!this.ok) return;
@@ -149,6 +156,7 @@ class Validate {
         }
     }
 
+    // clean this function
     validate (inputs) {
         for (let input of inputs) {
             this.setLen(input);
@@ -160,12 +168,12 @@ class Validate {
 
             if (!input.required && !input.val) continue;
 
-            const validate = this.check(input);
+            this.check(input);
 
-            if (input.val && validate.status) continue;
+            if (input.val && this.ok) continue;
 
             this.ok = false;
-            return Validate.error(input, this.message(input, validate.message), this.form);
+            return Validate.error(input, this.setMessage(input));
         }
 
         this.ok = true;
