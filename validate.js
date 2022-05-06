@@ -27,12 +27,6 @@ class Validate {
             .test(input.val)
     );
 
-    // use factory function
-    retype = (input, reference = input.getAttribute("retype")) => (this.status(
-        input.val == this.inputs.find(input => input.name == reference).val,
-        "conferm password"
-    ));
-
     number (input) {
         if (!(+input.val >= input.minnum && +input.val <= input.maxnum))
             this.status(false, "number out of range");
@@ -92,20 +86,13 @@ class Validate {
 
     tel = input => this.status(/^\+\d{12}$/.test(input.val));
 
-    // clean this method
     check (input) {
-        const check = input.getAttribute("check"),
-            retype = input.getAttribute("retype"),
-            same = input.getAttribute("same-password"),
-            sameTarget = this.form.querySelector(`[name=${same}]`);
+        if (input.retype)
+            return this.status(input.val == input.retype, "conferm password");
 
-        if (sameTarget) this.setLen(sameTarget)
+        this[input.check](input);
 
-        if (retype) return this.retype(input, retype);
-
-        this[check](input);
-
-        if (same && this.same(input.val, sameTarget.val) && this.ok)
+        if (input.same && this.same(input.val, input.same) && this.ok)
             this.status(false, "password and username is same");
     }
 
@@ -140,8 +127,13 @@ class Validate {
         scrollTo(0, errorTooltip.getBoundingClientRect().y + scrollY / 2);
     }
 
-    setLen (input) {
+    // clean this method
+    set values (input) {
         input.val = (input.getAttribute("check")?? "password").includes("password")? input.value: input.value.trim();
+
+        input.check = input.getAttribute("check");
+        input.retype = this.inputs.find(retype => retype.name == input.getAttribute("retype"))?.val;
+        input.same = this.inputs.find(target => target.name == input.getAttribute("same-password"))?.val;
 
         const len = {
             maxnum: input.max,
@@ -156,10 +148,10 @@ class Validate {
         }
     }
 
-    // clean this function
+    // clean this method
     validate (inputs) {
         for (let input of inputs) {
-            this.setLen(input);
+            this.values = input;
 
             if (input.required && !input.val) {
                 this.ok = false;
