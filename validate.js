@@ -177,17 +177,14 @@ class Validate {
         }
 
         this.ok = true;
-
-        if (!this.data)
-            return new FormData(this.form);
+        this.data = new FormData(this.form);
     }
 
     constructor (form) {
         this.form = form;
-        this.details = form.hasAttribute("details");
+        this.details = [...form.attributes].find(node => node.name.includes("details"))
 
         this.inputs = [...form.querySelectorAll("input[check], input[retype]")];
-
-        this.data = this.validate(this.inputs)?? new FormData;
+        this.validate(this.inputs);
     }
 }

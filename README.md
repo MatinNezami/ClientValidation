@@ -38,6 +38,7 @@ You can use form data for AJAX to server
 
 What is `details` attribute?
 
+You can use any attribute that has the details word, for example: `error-details`  
 `details` attribute for show details error, for exaple:
 
 ```
