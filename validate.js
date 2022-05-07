@@ -99,6 +99,7 @@ class Validate {
     set add (input) {
         if (!this.ok) return;
         this.validate([input]);
+        this.inputs.push(input);
 
         if (this.ok) this.data.append(input.name, input.value);
     }
