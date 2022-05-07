@@ -55,7 +55,6 @@ class Validate {
         }
     }
 
-    // clean this method
     file (input) {
         for (const file of input.files) {
             const types = input.getAttribute("mime"),
@@ -65,13 +64,13 @@ class Validate {
                 if (file.type.includes(type.replaceAll(',', "").replaceAll(' ', "")))
                     var has = true;
 
-            if (!has) return this.status(false, "upload file type invalid");
+            if (!has) this.status(false, "upload file type invalid");
 
-            if (file.size < size.next().value)
-                return this.status(false, "upload file is small");
+            else if (file.size < size.next().value)
+                this.status(false, "upload file is small");
                 
-            if (file.size > size.next().value)
-                return this.status(false, "upload file is big");
+            else if (file.size > size.next().value)
+                this.status(false, "upload file is big");
         }
     }
 
@@ -83,9 +82,9 @@ class Validate {
 
     check (input) {
         if (input.retype)
-            return this.status(input.val == input.retype, "conferm password");
+            this.status(input.val == input.retype, "conferm password");
 
-        this[input.check](input);
+        else this[input.check](input);
 
         if (input.same && this.same(input.val, input.same) && this.ok)
             this.status(false, "password and username is same");
@@ -119,7 +118,7 @@ class Validate {
         clearTimeout(window._errorTime_);
         window._errorTime_ = setTimeout(_ => errorTooltip.classList.remove("active"), 3000);
 
-        scrollTo(0, errorTooltip.getBoundingClientRect().y + scrollY / 2);
+        scrollTo(0, dimension.y + scrollY / 2);
     }
 
     set length (input) {
@@ -137,7 +136,7 @@ class Validate {
     }
 
     set values (input) {
-        input.check = input.getAttribute("check");
+        input.check = input.getAttribute("check")?? "";
         input.val = input.check.includes("password")? input.value: input.value.trim();
 
         input.retype = this.inputs.find(retype => retype.name == input.getAttribute("retype"))?.val;
